@@ -1,6 +1,7 @@
 import pygame, sys, math, random
 from Rqueue import *
 from BulletsClass import BulletsClass
+from own import OwnClass
 
 class OwnFly(pygame.sprite.Sprite):
     def __init__(self,image_file,location):
@@ -62,7 +63,7 @@ def fonts(text, size, x, y,rq):
 pygame.init()
 screen = pygame.display.set_mode([450,700])
 screen.fill([255,255,255])
-own = OwnFly('image/own/own1.png',[250,350])
+own = OwnClass([250,550])
 rq = Rqueue()
 pygame.key.set_repeat(12,12)
 bullets = []
@@ -77,12 +78,17 @@ while True:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP and own.rect.centery-10>0:
                 own.rect.centery -= 6
+                own.imagees()
             if event.key == pygame.K_DOWN and own.rect.centery+10<700 :
+                own.imagees()
                 own.rect.centery += 6
             if event.key == pygame.K_LEFT and own.rect.centerx-10>0:
                 own.rect.centerx -= 6
+                own.left()
             if event.key == pygame.K_RIGHT and own.rect.centerx+10<450:
                 own.rect.centerx += 6
+                own.right()
+
     clock.tick(50)
     screen.fill([255,255,255])
     b = random.randint(0,10)
@@ -94,7 +100,7 @@ while True:
         bullet = BulletsClass(1,[intx,inty], own.rect.center)
         bullets.append(bullet)
 
-    rq.add(own.images(), own.rect)
+    rq.add(own.image, own.rect)
     anim(bullets, own,rq)
     fonts('on: %s/%s' % (score,maxs),16,30,30,rq)
     rq.add(None, None,True)
