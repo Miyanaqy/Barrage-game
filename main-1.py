@@ -2,6 +2,7 @@ import pygame, sys, math, random
 from Rqueue import *
 from BulletsClass import BulletsClass
 from own import OwnClass
+from foe import *
 
 class OwnFly(pygame.sprite.Sprite):
     def __init__(self,image_file,location):
@@ -44,6 +45,15 @@ def mox(x):
 
 def anim(bullets, own,rq):
     global score
+    for foe in foes:
+        foe.move(own,bullets)
+        rq.add(foe.image, foe.rect)
+        if foe.rect.centerx > 450 or foe.rect.centery >700 or foe.rect.centerx <0 or foe.rect.centery < 0 :
+            foes.remove(foe)
+        if math.sqrt(mox(abs(foe.rect.centerx-own.rect.centerx)) + mox(abs(foe.rect.centery-own.rect.centery))) < foe.rect.width/2 + 5 :
+            score += 1
+            foes.remove(foe)
+        
     for bullet in bullets:
         bullet.move()
         rq.add(bullet.image, bullet.rect)
@@ -52,6 +62,7 @@ def anim(bullets, own,rq):
         if math.sqrt(mox(abs(bullet.rect.centerx-own.rect.centerx)) + mox(abs(bullet.rect.centery-own.rect.centery))) < bullet.rect.width/2 + 5 :
             score += 1
             bullets.remove(bullet)
+
 
 def fonts(text, size, x, y,rq):
     font = pygame.font.Font(None, size)
@@ -67,6 +78,7 @@ own = OwnClass([250,550])
 rq = Rqueue()
 pygame.key.set_repeat(12,12)
 bullets = []
+foes = []
 clock = pygame.time.Clock()
 global score
 score = 0
@@ -91,14 +103,16 @@ while True:
 
     clock.tick(50)
     screen.fill([255,255,255])
-    b = random.randint(0,10)
-    if b :
-        angle = random.randint(0,360)
+    b = random.randint(0,20)
+    if b == 0 :
+        '''angle = random.randint(0,360)
         intx = 100 * math.sin(angle*math.pi/180)+120
         inty = 100 * math.cos(angle*math.pi/180)+120
         maxs += 1
         bullet = BulletsClass(1,[intx,inty], own.rect.center)
-        bullets.append(bullet)
+        bullets.append(bullet)'''
+        foe = BlueFoe([450, 60])
+        foes.append(foe)
 
     rq.add(own.image, own.rect)
     anim(bullets, own,rq)
