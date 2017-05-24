@@ -11,7 +11,7 @@ class Foe():
         self.index = 0
 
     def reImage(self):
-        return pygame.image.load(self.images[(self.index / 4) % 4])
+        return pygame.image.load(self.images[int(self.index / 4) % 4])
 
 
 class RedFoe(Foe):
@@ -30,13 +30,13 @@ class BlueFoe(Foe):
     def move(self, own, bullets):
         self.index += 1
         if self.index < 70:
-            self.rect.centerx -= 4
+            self.rect.centerx -= 210/70.0
             
         elif self.index < 250:
-            self.rect.centerx = 200 * math.sin(self.index*2*math.pi/180)+225
-            self.rect.centery = 200 * math.cos(self.index*2*math.pi/180)+260
+            self.rect.centerx = 160 * math.sin((self.index+20)*2*math.pi/180)+225
+            self.rect.centery = 160 * math.cos((self.index+20)*2*math.pi/180)+220
             if self.index > 80 and self.index <110 and self.index % 5 == 0 :
-                bullet = BulletsClass(1,self.rect.center,own.rect.center)
+                bullet = FoeBullets(1,self.rect.center,own.rect.center)
                 bullets.append(bullet)
 
         elif self.index >= 250:

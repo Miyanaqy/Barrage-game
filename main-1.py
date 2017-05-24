@@ -1,6 +1,6 @@
 import pygame, sys, math, random
 from Rqueue import *
-from BulletsClass import BulletsClass
+from BulletsClass import *
 from own import OwnClass
 from foe import *
 
@@ -47,7 +47,7 @@ def anim(bullets, own,rq):
     global score
     for foe in foes:
         foe.move(own,bullets)
-        rq.add(foe.image, foe.rect)
+        rq.add(foe.reImage(), foe.rect)
         if foe.rect.centerx > 450 or foe.rect.centery >700 or foe.rect.centerx <0 or foe.rect.centery < 0 :
             foes.remove(foe)
         if math.sqrt(mox(abs(foe.rect.centerx-own.rect.centerx)) + mox(abs(foe.rect.centery-own.rect.centery))) < foe.rect.width/2 + 5 :
@@ -62,6 +62,13 @@ def anim(bullets, own,rq):
         if math.sqrt(mox(abs(bullet.rect.centerx-own.rect.centerx)) + mox(abs(bullet.rect.centery-own.rect.centery))) < bullet.rect.width/2 + 5 :
             score += 1
             bullets.remove(bullet)
+    for bullet in ownBullets:
+        bullet.move()
+        rq.add(bullet.image, bullet.rect)
+        if bullet.rect.centerx > 450 or bullet.rect.centery >700 or bullet.rect.centerx <0 or bullet.rect.centery < 0 :
+            ownBullets.remove(bullet)
+        
+            
 
 
 def fonts(text, size, x, y,rq):
@@ -79,6 +86,7 @@ rq = Rqueue()
 pygame.key.set_repeat(12,12)
 bullets = []
 foes = []
+ownBullets = []
 clock = pygame.time.Clock()
 global score
 score = 0
@@ -100,6 +108,10 @@ while True:
             if event.key == pygame.K_RIGHT and own.rect.centerx+10<450:
                 own.rect.centerx += 6
                 own.right()
+            if event.key == pygame.K_z:
+                ownBullet = OwnBullets(2,own.rect.center)
+                ownBullets.append(ownBullet)
+                
 
     clock.tick(50)
     screen.fill([255,255,255])
