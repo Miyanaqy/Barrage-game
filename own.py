@@ -6,6 +6,7 @@ class OwnClass():
         self.left_images = []
         self.right_images = []
         self.angle = 0
+        self.speed = [0,0]
         for i in range(7):
             self.left_images.append('image/own/own_left%s.png' % (i+1))
             self.right_images.append('image/own/own_right%s.png' % (i+1))
