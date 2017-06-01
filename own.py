@@ -1,7 +1,8 @@
 import pygame
+from Rqueue import *
 
 class OwnClass():
-    def __init__(self,poi):
+    def __init__(self,pos):
         self.images = []
         self.left_images = []
         self.right_images = []
@@ -14,27 +15,18 @@ class OwnClass():
                 self.images.append('image/own/own%s.png' % (i+1))
         self.image = pygame.image.load(self.images[0])
         self.rect = self.image.get_rect()
-        self.rect.center = poi
+        self.rect.center = pos
         self.imagesum = 0
+        self.speed = [0, 0]
 
-    def left(self):
-        if self.angle < 3:
-            self.angle += 1
-        else:
-            self.imagesum += 1
-            if self.imagesum > 3: self.imagesum = 0
-        self.image = pygame.image.load(self.left_images[self.angle+self.imagesum])
-        return self.image
-    def right(self):
-        if self.angle < 3:
-            self.angle += 1
-        else:
-            self.imagesum += 1
-            if self.imagesum > 3: self.imagesum = 0
-        self.image = pygame.image.load(self.right_images[self.angle+self.imagesum])
-        return self.image
-    def imagees(self):
+    def move(self):
+        self.rect.centerx += self.speed[0]
+        self.rect.centery += self.speed[1]
         self.imagesum += 1
-        if self.imagesum > 3: self.imagesum = 0
-        self.image = pygame.image.load(self.images[self.imagesum])
-        return self.image
+        self.image = pygame.image.load(self.images[int((self.imagesum%12))//3])
+
+    def die(self):
+        rq = Rqueue.creatRq()
+        images = []
+        pos = self.rect
+        rq.add(images,pos,len(images))

@@ -1,5 +1,7 @@
 import pygame,math
 from BulletsClass import *
+from Rqueue import *
+from drop import *
 class Foe():
     def __init__(self, HP, images, pos):
         self.HP = HP
@@ -13,6 +15,14 @@ class Foe():
     def reImage(self):
         return pygame.image.load(self.images[int(self.index / 4) % 4])
 
+    def coll(self, own):
+        self.HP -= 100
+        if HP < 0:
+            self.die()
+        own.die()
+
+    def die(self):
+        pass
 
 class RedFoe(Foe):
     def __init__(self, pos):
@@ -23,9 +33,10 @@ class RedFoe(Foe):
         pass
 
 class BlueFoe(Foe):
-    def __init__(self, pos):
+    def __init__(self, pos, drop):
         images = ['image/foe/foe1_1.png','image/foe/foe1_2.png','image/foe/foe1_3.png','image/foe/foe1_4.png']
         super(BlueFoe, self).__init__(15, images, pos)
+        self.drop = drop
 
     def move(self, own, bullets):
         self.index += 1
@@ -41,4 +52,10 @@ class BlueFoe(Foe):
 
         elif self.index >= 250:
             self.rect.centerx -= 4
+
+    def die(self):
+        rq = Rqueue.creatRq()
+        images = []
+        pos = self.rect
         
+        rq.add(images,pos,len(images))
