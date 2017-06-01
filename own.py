@@ -24,6 +24,8 @@ class OwnClass():
         self.rect.centery += self.speed[1]
         self.imagesum += 1
         self.image = pygame.image.load(self.images[int((self.imagesum%12))//3])
+        if  self .imagesum > 12:
+            self.imagesum = 0
 
     def die(self):
         rq = Rqueue.creatRq()
