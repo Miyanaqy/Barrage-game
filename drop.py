@@ -5,8 +5,8 @@ class Drop():
         self.images = ['image/Drop/D.png','image/Drop/P2.png']
         self.image = pygame.image.load(self.images[type])
         self.rect = self.image.get_rect()
-        self.rect.width = self.rect.width + 50
-        self.rect.height = self.rect.height + 50
+        self.rect.width = self.rect.width
+        self.rect.height = self.rect.height
         self.rect.center = pos
 class UpgradeDrop(Drop):
     def __init__(self, pos):

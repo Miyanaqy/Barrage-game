@@ -3,46 +3,71 @@ from multiprocessing import Process
 import os
 from Rqueue import *
 from BulletsClass import *
-from own import OwnClass
+from own import *
 from foe import *
 from collision import *
-from Drop import *
+from drop import *
 
-def moveAll(own, foes, bullets, ownBullets, drop):
+def moveAll(own, foes, bullets, ownBullets, drops):
     own.move()
     for foe in foes:
-        foe.move()
+        foe.move(own, bullets)
     for bullet in bullets:
         bullet.move()
+        if abs(bullet.rect.centerx - width/2) > width/2 or abs(bullet.rect.centery - height/2) > height/2:
+            bullets.remove(bullet)
     for obullet in ownBullets:
         obullet.move()
+        if abs(obullet.rect.centerx - width/2) > width/2 or abs(obullet.rect.centery - height/2) > height/2:
+            ownBullets.remove(obullet)
+    for drop in drops:
+        drop.move()
+        if abs(drop.rect.centerx - width/2) > width/2 or abs(drop.rect.centery - height/2) > height/2:
+            drops.remove(drop)
+    colli1(own, foes, bullets, drops)
+    colli2(foes, ownBullets)
 
-    drop.move()
-
-def colli1(own, foes, bullets,drops):
+def colli1(own, foes, bullets, drops):
+    global ownDie
+    global dieTime
     for foe in foes:
-        if collision(own, foe):
-            foe.coll(own,drops)
+        if collision(own, foe.foe):
+            die = foe.foe.coll(own.atr, drops)
+            own.die()
+            ownDie = True
+            ownShadow.rect.center = [225,730]
+            dieTime = 0
+            if die: foes.remove(foe)
     for bullet in bullets:
         if collision(own, bullet):
-            pass
+            bullets.remove(bullet)
+            own.die()
+            ownDie = True
+            ownShadow.rect.center = [225,730]
+            dieTime = 0
+    for drop in drops:
+        if collision(own, drop):
+            drops.remove(drop)
+            own.barrage.barUp()
 
 def colli2(foes, ownBullets):
     for foe in foes:
         for bullet in ownBullets:
-            if collision(foe, bullet):
-                pass
+            if collision(foe.foe, bullet):
+                die = foe.foe.coll(bullet.atr, drops)
+                if die: foes.remove(foe)
+                ownBullets.remove(bullet)
 
 def draw(own, foes, bullets, ownBullets, drop):
     screen.blit(own.image, own.rect)
     for foe in foes:
-        screen.blit(foe.image, foe.rect)
+        screen.blit(foe.foe.image, foe.foe.rect)
     for bullet in bullets:
-        screen.blit(bullet,image, bullet.rect)
+        screen.blit(bullet.image, bullet.rect)
     for ownBullet in ownBullets:
         screen.blit(ownBullet.image, ownBullet.rect)
-
-    screen.blit(drop.image, drop.rect)
+    for drop in drops:
+        screen.blit(drop.image, drop.rect)
 
 def rqueueDraw(rq):
     rq.add(None,None,True,0)
@@ -55,21 +80,33 @@ def rqueueDraw(rq):
             break
 
 pygame.init()
-screen = pygame.display.set_mode([450,700])
+global width
+global height
+width, height = (450,700)
+screen = pygame.display.set_mode([width,height])
 screen.fill([255,255,255])
-own = OwnClass([250,550])
-rq = Rqueue.creatRq()
-pygame.key.set_repeat(12,12)
+
 bullets = []
 foes = []
 ownBullets = []
 drops = []
+own = OwnClass([250,550], width/2, height/2, ownBullets)
+ownShadow = OwnShadow()
+rq = Rqueue.creatRq()
+pygame.key.set_repeat(12,12)
 clock = pygame.time.Clock()
 global score
+global ownDie
+ownDie = False
 score = 0
 maxs = 0
-drop = FractionDrop([250,30])
-drops.append(drop)
+global dieTime
+
+drop = FractionDrop([150,30])
+
+foe = FoeMove1(BlueFoe([250,50],drop))
+foes.append(foe)
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -99,11 +136,18 @@ while True:
                 own.shooting = False
                     
 
-    clock.tick(50)
+    clock.tick(30)
     screen.fill([255,255,255])
     b = random.randint(0,20)
-    moveAll(own, foes, bullets, ownBullets,drop)
-    draw(own,foes,bullets,ownBullets,drop)
+    moveAll(own, foes, bullets, ownBullets,drops)
+    draw(own,foes,bullets,ownBullets,drops)
+    if ownDie:
+        dieTime += 1
+        ownShadow.move()
+        screen.blit(ownShadow.image, ownShadow.rect)
+        if dieTime > 30:
+            own.rect.center = ownShadow.rect.center
+            ownDie = False
     pygame.display.flip()
-
+    
 
