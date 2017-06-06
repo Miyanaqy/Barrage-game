@@ -103,8 +103,8 @@ maxs = 0
 global dieTime
 
 drop = FractionDrop([150,30])
-
-foe = FoeMove1(BlueFoe([250,50],drop))
+shoot = 0
+foe = FoeMove1(BlueFoe([250,50],drop), shoot)
 foes.append(foe)
 
 while True:
@@ -136,7 +136,7 @@ while True:
                 own.shooting = False
                     
 
-    clock.tick(30)
+    clock.tick(50)
     screen.fill([255,255,255])
     b = random.randint(0,20)
     moveAll(own, foes, bullets, ownBullets,drops)
