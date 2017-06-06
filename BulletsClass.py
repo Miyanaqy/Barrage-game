@@ -83,15 +83,18 @@ def angle(pos, epos):
     x = epos[0] - pos[0]
     y = epos[1] - pos[1]
     c = math.sqrt(x**2 + y**2)
-    sina = x / c
+    sina = y / c
     angle = math.asin(sina) * 180 / math.pi
-    return angle
+    if x < 0:
+        return (180 - angle)
+    else:
+        return angle
 
 def speed(angle):
-    x1 = 0 * math.sin(angle * math.pi/180)
-    y1 = 0 * math.cos(angle * math.pi/180)
-    x2 = 6 * math.sin(angle * math.pi/180)
-    y2 = 6 * math.cos(angle * math.pi/180)
+    x1 = 0 * math.cos(angle * math.pi/180)
+    y1 = 0 * math.sin(angle * math.pi/180)
+    x2 = 6 * math.cos(angle * math.pi/180)
+    y2 = 6 * math.sin(angle * math.pi/180)
     speed = [x2 - x1, y2 - y1]
     return speed
 

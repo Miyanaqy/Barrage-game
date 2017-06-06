@@ -104,7 +104,7 @@ global dieTime
 
 drop = FractionDrop([150,30])
 shoot = 0
-foe = FoeMove1(BlueFoe([250,50],drop), shoot)
+foe = FoeMove1(BlueFoe([250,350],drop), shoot)
 foes.append(foe)
 
 while True:
