@@ -5,9 +5,15 @@ class BulletsClass():
         self.image = pygame.image.load('image/bullet/bullet%s.png' % type)
         self.rect = self.image.get_rect()
         self.rect.center = pos
+        self.x = float(self.rect.centerx)
+        self.y = float(self.rect.centery)
 
     def move(self):
-        self.rect = self.rect.move(self.speed)
+        self.x += self.speed[0]
+        self.y += self.speed[1]
+        self.rect.centerx = self.x
+        self.rect.centery = self.y
+
     def die(self, ownBullets):
         ownBullets.remove(self)
 
@@ -21,8 +27,26 @@ class OwnBullet1(BulletsClass):
     def __init__(self, pos, speed):
         super(OwnBullet1, self).__init__(21,pos)
         self.speed = speed
-        self.atr = 3
-		
+        self.atr = 3    
+
+class Shoot1():
+    def shooting(self, pos, epos, bullets):
+        #s = math.sqrt((epos[0] - pos[0])**2 + (epos[1] - pos[1])**2) / 12
+        ang = angle(pos, epos)
+        sp = speed(ang)
+        bullet = BulletsClass(1, pos)
+        bullet.speed = sp
+        bullets.append(bullet)
+
+
+
+class ShootMode():
+    shoots = [Shoot1(),]
+    
+    @classmethod
+    def get_shoot(cls,shoot):
+        return ShootMode.shoots[shoot]
+
 class Barrage():
     def __init__(self):
         self.state = [BarrageOne(), BarrageTwo(), BarrageThree(), BarrageFour()]
@@ -56,6 +80,22 @@ class BarrageFour():
     def shooting(self):
         pass
             
-class barrageFoeOne():
-    def shooting(self, pos, opos, ownBullets):
-        pass
+
+
+def angle(pos, epos):
+    x = epos[0] - pos[0]
+    y = epos[1] - pos[1]
+    c = math.sqrt(x**2 + y**2)
+    sina = y / c
+    angle = math.asin(sina) * 180 / math.pi
+    if x < 0:
+        return (180 - angle)
+    else:
+        return angle
+
+def speed(angle):
+    xsp = 6 * math.cos(angle * math.pi/180)
+    ysp = 6 * math.sin(angle * math.pi/180)
+    speed = [xsp, ysp]
+    return speed
+
