@@ -55,10 +55,10 @@ class FoeMove1():
 
     def move(self, own, bullets):
         self.index += 1
-        self.foe.rect.centery += 0
-        if self.index % 10 == 0:
+        self.foe.rect.centery += 1
+        if self.index % 50 == 0:
             self.shoot.shooting(self.foe.rect.center, own.rect.center, bullets)
-        
+        self.foe.image = pygame.image.load(self.foe.images[int((self.index%4))])
 			
     def coll(self):
         self.foe.coll()

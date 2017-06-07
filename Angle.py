@@ -5,6 +5,7 @@ def Angle(pos, epos):
     x = epos[0] - pos[0]
     y = epos[1] - pos[1]
     c = math.sqrt(x**2 + y**2)
+    if c == 0 : c = 1
     sina = y / c
     angle = math.asin(sina) * 180 / math.pi
     if x < 0:
