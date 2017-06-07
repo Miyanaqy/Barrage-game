@@ -55,7 +55,7 @@ class FoeMove1():
     def move(self, own, bullets):
         self.index += 1
         self.foe.rect.centery += 0
-        if self.index % 5 == 0:
+        if self.index % 10 == 0:
             self.shoot.shooting(self.foe.rect.center, own.rect.center, bullets)
         
 			

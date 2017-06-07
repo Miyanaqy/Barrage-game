@@ -1,4 +1,5 @@
 import pygame, math
+from Angle import *
 class BulletsClass():
     def __init__(self,type,pos):
         self.type = type
@@ -32,8 +33,8 @@ class OwnBullet1(BulletsClass):
 class Shoot1():
     def shooting(self, pos, epos, bullets):
         #s = math.sqrt((epos[0] - pos[0])**2 + (epos[1] - pos[1])**2) / 12
-        ang = angle(pos, epos)
-        sp = speed(ang)
+        ang = Angle(pos, epos)
+        sp = Speed(ang)
         bullet = BulletsClass(1, pos)
         bullet.speed = sp
         bullets.append(bullet)
@@ -82,20 +83,4 @@ class BarrageFour():
             
 
 
-def angle(pos, epos):
-    x = epos[0] - pos[0]
-    y = epos[1] - pos[1]
-    c = math.sqrt(x**2 + y**2)
-    sina = y / c
-    angle = math.asin(sina) * 180 / math.pi
-    if x < 0:
-        return (180 - angle)
-    else:
-        return angle
-
-def speed(angle):
-    xsp = 6 * math.cos(angle * math.pi/180)
-    ysp = 6 * math.sin(angle * math.pi/180)
-    speed = [xsp, ysp]
-    return speed
 
