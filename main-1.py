@@ -31,7 +31,7 @@ def colli1(own, foes, bullets, drops):
     global ownDie
     global dieTime
     for foe in foes:
-        if collision(own, foe.foe):
+        if collision(own, foe.foe, -10):
             die = foe.foe.coll(own.atr, drops)
             own.die()
             ownDie = True
@@ -39,16 +39,17 @@ def colli1(own, foes, bullets, drops):
             dieTime = 0
             if die: foes.remove(foe)
     for bullet in bullets:
-        if collision(own, bullet):
+        if collision(own, bullet, -10):
             bullets.remove(bullet)
             own.die()
             ownDie = True
             ownShadow.rect.center = [225,730]
             dieTime = 0
     for drop in drops:
-        if collision(own, drop):
-            drops.remove(drop)
-            own.barrage.barUp()
+        if collision(own, drop, 30):
+            #drops.remove(drop)
+            #own.barrage.barUp()
+            drop.coll(drops, own)
 
 def colli2(foes, ownBullets):
     for foe in foes:
@@ -102,7 +103,7 @@ score = 0
 maxs = 0
 global dieTime
 
-drop = FractionDrop([150,30])
+drop = FractionDrop([-100,-100])
 shoot = 0
 foe = FoeMove1(BlueFoe([250,350],drop), shoot)
 foes.append(foe)
@@ -118,8 +119,10 @@ while True:
                 own.speed[1] = 6
             if event.key == pygame.K_LEFT and own.rect.centerx-10>0:
                 own.speed[0] = -6
+                own.state = 4
             if event.key == pygame.K_RIGHT and own.rect.centerx+10<450:
                 own.speed[0] = 6
+                own.state = 8
             if event.key == pygame.K_z:
                 own.shooting = True
 
@@ -130,8 +133,10 @@ while True:
                 own.speed[1] = 0
             if event.key == pygame.K_LEFT and own.rect.centerx-10>0:
                 own.speed[0] = 0
+                own.state = 0
             if event.key == pygame.K_RIGHT and own.rect.centerx+10<450:
                 own.speed[0] = 0
+                own.state = 0
             if event.key == pygame.K_z:
                 own.shooting = False
                     

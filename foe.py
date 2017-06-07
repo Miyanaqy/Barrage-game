@@ -43,7 +43,8 @@ class BlueFoe(Foe):
         #images = []
         #pos = self.rect
         #rq.add(images,pos,len(images))
-        self.drop.rect.center = self.rect.center
+        self.drop.x = self.rect.centerx
+        self.drop.y = self.rect.centery
         drops.append(self.drop)
 
 class FoeMove1():

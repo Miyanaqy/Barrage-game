@@ -5,17 +5,12 @@ from BulletsClass import *
 class OwnClass():
     def __init__(self, pos, width, height, bullets):
         self.images = []
-        self.left_images = []
-        self.right_images = []
+        for i in range(12):
+            self.images.append('image/own/own%s.png' % (i+1))
         self.angle = 0
-        self.speed = [0,0]
         self.cwid = width
         self.chei = height
-        for i in range(7):
-            self.left_images.append('image/own/own_left%s.png' % (i+1))
-            self.right_images.append('image/own/own_right%s.png' % (i+1))
-            if i < 4:
-                self.images.append('image/own/own%s.png' % (i+1))
+        self.speed = [0,0]
         self.image = pygame.image.load(self.images[0])
         self.rect = self.image.get_rect()
         self.rect.center = pos
@@ -25,12 +20,13 @@ class OwnClass():
         self.shooting= False
         self.bullets = bullets
         self.atr = 100
+        self.state = 0
 
     def move(self):
         self.rect.centerx += self.speed[0]
         self.rect.centery += self.speed[1]
         self.imagesum += 1
-        self.image = pygame.image.load(self.images[int((self.imagesum%12))//3])
+        self.image = pygame.image.load(self.images[int((self.imagesum%12))//3 + self.state])
         if  self .imagesum > 12:
             self.imagesum = 0
         if abs(self.rect.centerx - self.cwid) > self.cwid:

@@ -12,8 +12,8 @@ def Angle(pos, epos):
     else:
         return angle
 
-def Speed(angle):
-    xsp = 6 * math.cos(angle * math.pi/180)
-    ysp = 6 * math.sin(angle * math.pi/180)
+def Speed(angle, s=6):
+    xsp = s * math.cos(angle * math.pi/180)
+    ysp = s * math.sin(angle * math.pi/180)
     speed = [xsp, ysp]
     return speed
