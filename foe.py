@@ -2,6 +2,9 @@ import pygame,math
 from BulletsClass import *
 from Rqueue import *
 from drop import *
+from Angle import *
+
+#---------------------------怪物类----------------------------------
 class Foe():
     def __init__(self, HP, images, pos):
         self.HP = HP
@@ -43,21 +46,57 @@ class BlueFoe(Foe):
         #images = []
         #pos = self.rect
         #rq.add(images,pos,len(images))
-        self.drop.rect.center = self.rect.center
+        self.drop.x = self.rect.centerx
+        self.drop.y = self.rect.centery
         drops.append(self.drop)
 
-class FoeMove1():
+
+#--------------------------------怪物的移动类----------------------------
+class FoeMove():
     def __init__(self, foe, shoot):
         self.foe = foe
         self.index = 0
         self.shoot = ShootMode.get_shoot(shoot)
-
-    def move(self, own, bullets):
-        self.index += 1
-        self.foe.rect.centery += 0
-        if self.index % 5 == 0:
-            self.shoot.shooting(self.foe.rect.center, own.rect.center, bullets)
-        
-			
     def coll(self):
         self.foe.coll()
+
+class FoeMove1(FoeMove):
+    def move(self, own, bullets):
+        self.index += 1
+        if self.index < 45:
+            self.foe.rect.centerx -= 5
+        elif self.index >= 45 and self.index < 225:
+            sp = Speed((360 - self.index * 2), 160)
+            self.foe.rect.center = [sp[0] + 225, sp[1] + 210]
+            if self.index % 10 == 0:
+                self.shoot.shooting(self.foe.rect.center, own.rect.center, bullets)
+        elif self.index >= 225:
+            self.foe.rect.centerx -= 5
+        self.foe.image = pygame.image.load(self.foe.images[int((self.index%4))])
+        
+class FoeMove2(FoeMove):
+    def move(self, own, bullets):
+        self.index += 1
+        if self.index < 45:
+            self.foe.rect.centerx += 5
+        elif self.index >= 45 and self.index < 225:
+            sp = Speed(self.index * 2+180, 160)
+            self.foe.rect.center = [sp[0] + 225, sp[1] + 210]
+            if self.index % 10 == 0:
+                self.shoot.shooting(self.foe.rect.center, own.rect.center, bullets)
+        elif self.index >= 225:
+            self.foe.rect.centerx += 5
+        self.foe.image = pygame.image.load(self.foe.images[int((self.index%4))])
+
+class FoeMove3(FoeMove):
+    def move(self, own, bullets):
+        self.index += 1
+        if self.index < 50:
+            self.foe.rect.centery += 2
+        if self.index >= 50 and self.index < 500:
+            if self.index % 15 == 0:
+                self.shoot.shooting(self.foe.rect.center, own.rect.center, bullets)
+        if self.index > 500:
+            self.foe.rect.centery += 3
+            if self.index % 15 == 0:
+                self.shoot.shooting(self.foe.rect.center, own.rect.center, bullets)

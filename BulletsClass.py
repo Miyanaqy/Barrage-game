@@ -1,4 +1,8 @@
 import pygame, math
+from Angle import *
+import random
+
+#----------------------------子弹类-------------------------------------
 class BulletsClass():
     def __init__(self,type,pos):
         self.type = type
@@ -13,13 +17,9 @@ class BulletsClass():
         self.y += self.speed[1]
         self.rect.centerx = self.x
         self.rect.centery = self.y
-        
 
-class FoeBullets(BulletsClass):
-    def __init__(self, type, pos, epos):
-        super(FoeBullets, self).__init__(type,pos)
-        s = math.sqrt(abs(epos[0] - pos[0])**2 + abs(epos[1] - pos[1])**2) / 12.0
-        self.speed = [(epos[0] - pos[0]) / s, (epos[1] - pos[1]) / s]
+    def die(self, ownBullets):
+        ownBullets.remove(self)
 
 class OwnBullet1(BulletsClass):
     def __init__(self, pos, speed):
@@ -27,24 +27,55 @@ class OwnBullet1(BulletsClass):
         self.speed = speed
         self.atr = 3    
 
+
+#-----------------------------敌机弹幕----------------------------------
 class Shoot1():
     def shooting(self, pos, epos, bullets):
         #s = math.sqrt((epos[0] - pos[0])**2 + (epos[1] - pos[1])**2) / 12
-        ang = angle(pos, epos)
-        sp = speed(ang)
+        ang = Angle(pos, epos)
+        sp = Speed(ang)
         bullet = BulletsClass(1, pos)
         bullet.speed = sp
         bullets.append(bullet)
 
+class Shoot2():
+    def shooting(self, pos, epos, bullets):
+        for i in range(18):
+            ang = Angle(pos, epos)
+            sp = Speed(ang + i*20)
+            bullet = BulletsClass(9, pos)
+            bullet.speed = sp
+            bullets.append(bullet)
 
+class Shoot3():
+    def shooting(self, pos, epos, bullets):
+        apos = random.randint(0, 360)
+        rpos = random.randint(0, 50)
+        p = Speed(apos, rpos)
+        pos = [pos[0] + p[0], pos[1] + p[1]]
+        ang = Angle(pos, epos)
+        sp = Speed(ang)
+        bullet = BulletsClass(5, pos)
+        bullet.speed = sp
+        bullets.append(bullet)
+
+class Shoot4():
+    def shooting(self, pos, epos, bullets):
+        ang = Angle(pos, epos)
+        sp = Speed(ang, 3)
+        bullet = BulletsClass(18, pos)
+        bullet.speed = sp
+        bullets.append(bullet)
 
 class ShootMode():
-    shoots = [Shoot1(),]
+    shoots = [Shoot1(),Shoot2(),Shoot3(),Shoot4()]
     
     @classmethod
     def get_shoot(cls,shoot):
         return ShootMode.shoots[shoot]
 
+
+#---------------------------自机弹幕--------------------------------------
 class Barrage():
     def __init__(self):
         self.state = [BarrageOne(), BarrageTwo(), BarrageThree(), BarrageFour()]
@@ -77,8 +108,7 @@ class BarrageFour():
         pass
     def shooting(self):
         pass
-
-
+            
 def angle(pos, epos):
     x = epos[0] - pos[0]
     y = epos[1] - pos[1]
