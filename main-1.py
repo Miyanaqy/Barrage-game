@@ -56,7 +56,7 @@ def colli2(foes, ownBullets):
             if collision(foe.foe, bullet):
                 die = foe.foe.coll(bullet.atr, drops)
                 if die: foes.remove(foe)
-                ownBullets.remove(bullet)
+                bullet.die(ownBullets)
 
 def draw(own, foes, bullets, ownBullets, drop):
     screen.blit(own.image, own.rect)
@@ -136,7 +136,7 @@ while True:
                 own.shooting = False
                     
 
-    clock.tick(30)
+    clock.tick(40)
     screen.fill([255,255,255])
     b = random.randint(0,20)
     moveAll(own, foes, bullets, ownBullets,drops)

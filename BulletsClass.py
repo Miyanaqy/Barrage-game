@@ -8,11 +8,13 @@ class BulletsClass():
 
     def move(self):
         self.rect = self.rect.move(self.speed)
+    def die(self, ownBullets):
+        ownBullets.remove(self)
 
 class FoeBullets(BulletsClass):
     def __init__(self, type, pos, epos):
         super(FoeBullets, self).__init__(type,pos)
-        s = math.sqrt(abs(epos[0] - pos[0])**2 + abs(epos[1] - pos[1])**2) / 16.0
+        s = math.sqrt(abs(epos[0] - pos[0])**2 + abs(epos[1] - pos[1])**2) / 12.0
         self.speed = [(epos[0] - pos[0]) / s, (epos[1] - pos[1]) / s]
 
 class OwnBullet1(BulletsClass):
@@ -20,8 +22,7 @@ class OwnBullet1(BulletsClass):
         super(OwnBullet1, self).__init__(21,pos)
         self.speed = speed
         self.atr = 3
-
-
+		
 class Barrage():
     def __init__(self):
         self.state = [BarrageOne(), BarrageTwo(), BarrageThree(), BarrageFour()]
@@ -55,3 +56,6 @@ class BarrageFour():
     def shooting(self):
         pass
             
+class barrageFoeOne():
+    def shooting(self, pos, opos, ownBullets):
+        pass
