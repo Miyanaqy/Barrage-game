@@ -12,6 +12,8 @@ def moveAll(own, foes, bullets, ownBullets, drops):
     own.move()
     for foe in foes:
         foe.move(own, bullets)
+        if abs(foe.foe.rect.centerx - width/2) > width/2+50 or abs(foe.foe.rect.centery - height/2) > height/2+50:
+            foes.remove(foe)
     for bullet in bullets:
         bullet.move()
         if abs(bullet.rect.centerx - width/2) > width/2+10 or abs(bullet.rect.centery - height/2) > height/2+10:
@@ -104,8 +106,8 @@ maxs = 0
 global dieTime
 
 drop = FractionDrop()
-shoot = 1
-foe = FoeMove3(BlueFoe([350,-10],drop), shoot)
+shoot = 5
+foe = FoeMove4(BlueFoe([150,-10],drop), shoot)
 foes.append(foe)
 
 while True:

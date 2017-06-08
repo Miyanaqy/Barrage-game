@@ -100,3 +100,23 @@ class FoeMove3(FoeMove):
             self.foe.rect.centery += 3
             if self.index % 15 == 0:
                 self.shoot.shooting(self.foe.rect.center, own.rect.center, bullets)
+
+#----------未完成------------------
+class FoeMove4(FoeMove):
+    def move (self, own, bullets):
+        self.index += 1
+        if self.index < 50:
+            self.foe.rect.centery += 2
+        elif self.index == 50:
+            self.cen = self.foe.rect.centerx
+        elif self.index > 50 and self.index < 500:
+            x = 80 * math.sin((self.index-50) * math.pi/180)
+            self.foe.rect.centerx = self.cen + x
+            self.shoot.shooting(self.foe.rect.center, own.rect.center, bullets, self.foe)
+        elif self.index == 500:
+            ang = Angle(self.foe.rect.center, own.rect.center)
+            sp = Speed(ang)
+            self.speed = sp
+        elif self.index > 500:
+            self.foe.rect.centery += self.speed[0]
+            self.foe.rect.centerx += self.speed[1]
