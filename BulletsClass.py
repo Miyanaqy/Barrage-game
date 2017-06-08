@@ -32,12 +32,36 @@ class LaserBullets(BulletsClass):
         self.rect.centerx = self.x
         self.rect.centery = self.y
 
+class XDeviationBullets(BulletsClass):
+    def __init__(self, type, pos, deviation):
+        super(XDeviationBullets, self).__init__(type, pos)
+        self.deviation = deviation
+    def move(self):
+        self.speed[0] = self.speed[0] + self.deviation
+        self.speed[1] = self.speed[1] + self.deviation
+        super(XDeviationBullets, self).move()
+
+class CurveBullets(BulletsClass):
+    def __init__(self, type, pos, angle):
+        super(CurveBullets, self).__init__(type, pos)
+        self.angle = angle
+
+    def move(self):
+        self.angle = self.angle + 1
+        self.speed = Speed(self.angle)
+        super(CurveBullets, self).move()
+
 class OwnBullet1(BulletsClass):
     def __init__(self, pos, speed):
         super(OwnBullet1, self).__init__(21,pos)
         self.speed = speed
-        self.atr = 3    
+        self.atr = 5    
 
+class OwnBullet2(BulletsClass):
+    def __init__(self, pos, speed):
+        super(OwnBullet2, self).__init__(22,pos)
+        self.speed = speed
+        self.atr = 3
 
 #-----------------------------敌机弹幕----------------------------------
 class Shoot1():
@@ -93,8 +117,25 @@ class Shoot6():
         bullet.speed = [0,15]
         bullets.append(bullet)
 
+class Shoot7():
+    def shooting(self, pos, epos, bullets, foe = None):
+        for i in range(18):
+            sp = Speed(i*20)
+            bullet = XDeviationBullets(8, pos, 0.1)
+            bullet.speed = sp
+            bullets.append(bullet)
+
+class Shoot8():
+    def shooting(self, pos, epos, bullets, foe = None):
+        for i in range(18):
+            ang = i * 20
+            sp = Speed(ang)
+            bullet = CurveBullets(7, pos, ang)
+            bullet.speed = sp
+            bullets.append(bullet)
+
 class ShootMode():
-    shoots = [Shoot1(),Shoot2(),Shoot3(),Shoot4(),Shoot5(),Shoot6()]
+    shoots = [Shoot1(),Shoot2(),Shoot3(),Shoot4(),Shoot5(),Shoot6(),Shoot7(),Shoot8()]
     
     @classmethod
     def get_shoot(cls,shoot):
@@ -109,31 +150,50 @@ class Barrage():
     def shooting(self, pos, ownBullets):
         self.state[self.index].shooting(pos, ownBullets)
     def barUp(self):
-        self.index += 1
+        if self.index < 4:
+            self.index += 1
 
 class BarrageOne():
     def shooting(self, pos, ownBullets):
-        b1 = OwnBullet1([pos[0], pos[1]-10], [0,-18])
+        b1 = OwnBullet2([pos[0], pos[1]-10], [0,-18])
         ownBullets.append(b1)
 
 class BarrageTwo():
     def shooting(self, pos, ownBullets):
-        b1 = OwnBullet1([pos[0]-13, pos[1]-10], [0,-18])
-        b2 = OwnBullet1([pos[0]+13, pos[1]-10], [0,-18])
+        b1 = OwnBullet2([pos[0]-13, pos[1]-10], [0,-18])
+        b2 = OwnBullet2([pos[0]+13, pos[1]-10], [0,-18])
         ownBullets.append(b1)
         ownBullets.append(b2)
 
 class BarrageThree():
-    def __init__(self):
-        pass
-    def shooting(self):
-        pass
+    def shooting(self, pos, ownBullets):
+        b1 = OwnBullet1([pos[0], pos[1]-10], [0, -18])
+        sp1 = Speed(270 - 5, 18)
+        #270是自机上方的角度，+ - 5为偏转角度， 18为子弹的速度参数
+        b2 = OwnBullet2([pos[0], pos[1]-10], sp1)
+        sp2 = Speed(270 + 5, 18)
+        b3 = OwnBullet2([pos[0], pos[1]-10], sp2)
+        ownBullets.append(b1)
+        ownBullets.append(b2)
+        ownBullets.append(b3)
 
 class BarrageFour():
-    def __init__(self):
-        pass
-    def shooting(self):
-        pass
+    def shooting(self, pos, ownBullets):
+        b1 = OwnBullet1([pos[0], pos[1]-10], [0, -18])
+        sp1 = Speed(270 - 5, 18)
+        #270是自机上方的角度，+ - 5为偏转角度， 18为子弹的速度参数
+        b2 = OwnBullet1([pos[0], pos[1]-10], sp1)
+        sp2 = Speed(270 + 5, 18)
+        b3 = OwnBullet1([pos[0], pos[1]-10], sp2)
+        sp3 = Speed(270 - 10, 18)
+        b4 = OwnBullet2([pos[0], pos[1]-10], sp3)
+        sp4 = Speed(270 + 10, 18)
+        b5 = OwnBullet2([pos[0], pos[1]-10], sp4)
+        ownBullets.append(b1)
+        ownBullets.append(b2)
+        ownBullets.append(b3)
+        ownBullets.append(b4)
+        ownBullets.append(b5)
             
 def angle(pos, epos):
     x = epos[0] - pos[0]

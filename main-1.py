@@ -16,7 +16,7 @@ def moveAll(own, foes, bullets, ownBullets, drops):
             foes.remove(foe)
     for bullet in bullets:
         bullet.move()
-        if abs(bullet.rect.centerx - width/2) > width/2+10 or abs(bullet.rect.centery - height/2) > height/2+10:
+        if abs(bullet.rect.centerx - width/2) > width/2+100 or abs(bullet.rect.centery - height/2) > height/2+100:
             bullets.remove(bullet)
     for obullet in ownBullets:
         obullet.move()
@@ -104,10 +104,14 @@ ownDie = False
 score = 0
 maxs = 0
 global dieTime
-
+#-------------------以下为测试内容------------------------
+#-----------------掉落物drop--------------------
 drop = FractionDrop()
-shoot = 5
-foe = FoeMove4(BlueFoe([150,-10],drop), shoot)
+#-----------------弹幕类型-----------------------
+shoot = 7
+#------------------怪物移动方式FoeMove,怪物外观BlueFoe-------------------
+foe = FoeMove3(BlueFoe([150,-10],drop), shoot)
+#------------------怪物组foes-------------------------
 foes.append(foe)
 
 while True:
