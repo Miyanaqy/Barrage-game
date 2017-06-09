@@ -6,14 +6,13 @@ from Angle import *
 
 #---------------------------怪物类----------------------------------
 class Foe():
-    def __init__(self, HP, images, pos):
+    def __init__(self, HP, images, pos, drop):
         self.HP = HP
         self.images = images
         self.image = pygame.image.load(self.images[0])
         self.rect = self.image.get_rect()
         self.rect.center = pos
-        self.behavior = 0
-        self.index = 0
+        self.drop = drop
 
     def reImage(self):
         return pygame.image.load(self.images[int(self.index / 4) % 4])
@@ -30,16 +29,15 @@ class Foe():
         pass
 
 class RedFoe(Foe):
-    def __init__(self, pos):
+    def __init__(self, pos, drop):
         images = ['image/foe/foe2_1.png','image/foe/foe2_2.png','image/foe/foe2_3.png','image/foe/foe2_4.png']
-        super(RedFoe, self).__init__(20, images, pos)
-
+        super(RedFoe, self).__init__(20, images, pos, drop)
 
 class BlueFoe(Foe):
     def __init__(self, pos, drop):
         images = ['image/foe/foe1_1.png','image/foe/foe1_2.png','image/foe/foe1_3.png','image/foe/foe1_4.png']
-        super(BlueFoe, self).__init__(15, images, pos)
-        self.drop = drop
+        super(BlueFoe, self).__init__(15, images, pos, drop)
+        
         
     def die(self, drops):
         #rq = Rqueue.creatRq()
@@ -50,13 +48,18 @@ class BlueFoe(Foe):
         self.drop.y = self.rect.centery
         drops.append(self.drop)
 
+def get_foe(index, pos, drop):
+    if index == 0:
+        foe = RedFoe(pos, drop)
+    elif index ==1:
+        foe = BlueFoe(pos, drop)
+    return foe
 
 #--------------------------------怪物的移动类----------------------------
 class FoeMove():
-    def __init__(self, foe, shoot):
+    def __init__(self, foe):
         self.foe = foe
         self.index = 0
-        self.shoot = ShootMode.get_shoot(shoot)
     def coll(self):
         self.foe.coll()
 
@@ -120,3 +123,15 @@ class FoeMove4(FoeMove):
         elif self.index > 500:
             self.foe.rect.centery += self.speed[0]
             self.foe.rect.centerx += self.speed[1]
+
+def get_foeMove(index, foe):
+    if index == 0:
+        foeMove = FoeMove1(foe)
+    elif index == 1:
+        foeMove = FoeMove2(foe)
+    elif index == 2:
+        foeMove = FoeMove3(foe)
+    elif index == 3:
+        foeMove = FoeMove4(foe)
+    
+    return foeMove

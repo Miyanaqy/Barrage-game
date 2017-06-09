@@ -7,28 +7,64 @@ from own import *
 from foe import *
 from collision import *
 from drop import *
+import copy
 
+def plot_read(chapter):
+    with open('plot/plot%s.txt' % chapter) as plot_file:
+        plots = plot_file.readlines()
+    return plots
+    
+def plot_process(plots, foes):
+    global proc
+    global plotIndex
+    proc += 1
+    print(proc)
+    print(len(plots),plotIndex)
+    while(plotIndex < len(plots)):
+        param = plots[plotIndex].split(',')
+        if proc == int(param[0]):
+            print(param)
+            creatFoe(param, foes)
+            plotIndex += 1
+        else:
+            return
+
+def creatFoe(param, foes):
+    shoot = ShootMode.get_shoot(int(param[1]))
+    pos = [int(param[4]), int(param[5])]
+    drop = get_drop(int(param[3]))
+    foe = get_foe(int(param[2]), pos, drop)
+    foeMove = get_foeMove(int(param[6]), foe)
+    foeMove.shoot = shoot
+    foes.append(foeMove)
+    
+#---------------------------物体移动--------------------------------
 def moveAll(own, foes, bullets, ownBullets, drops):
     own.move()
     for foe in foes:
         foe.move(own, bullets)
+        #敌机超出屏幕外50px后，消除敌机
         if abs(foe.foe.rect.centerx - width/2) > width/2+50 or abs(foe.foe.rect.centery - height/2) > height/2+50:
             foes.remove(foe)
     for bullet in bullets:
         bullet.move()
+        #弹幕超出屏幕外100px后，消除弹幕
         if abs(bullet.rect.centerx - width/2) > width/2+100 or abs(bullet.rect.centery - height/2) > height/2+100:
             bullets.remove(bullet)
     for obullet in ownBullets:
         obullet.move()
+        #自机弹幕超出屏幕10px后，消除弹幕
         if abs(obullet.rect.centerx - width/2) > width/2+10 or abs(obullet.rect.centery - height/2) > height/2+10:
             ownBullets.remove(obullet)
     for drop in drops:
         drop.move()
+        #掉落物超出屏幕外12px后，消除掉落物
         if abs(drop.rect.centerx - width/2) > width/2+10 or abs(drop.rect.centery - height/2) > height/2+10:
             drops.remove(drop)
     colli1(own, foes, bullets, drops)
     colli2(foes, ownBullets)
 
+#---------------------------物体碰撞------------------------------------
 def colli1(own, foes, bullets, drops):
     global ownDie
     global dieTime
@@ -37,7 +73,7 @@ def colli1(own, foes, bullets, drops):
             die = foe.foe.coll(own.atr, drops)
             own.die()
             ownDie = True
-            ownShadow.rect.center = [225,730]
+            ownShadow.rect.center = [225,730]#初始化位置
             dieTime = 0
             if die: foes.remove(foe)
     for bullet in bullets:
@@ -88,7 +124,8 @@ global height
 width, height = (450,700)
 screen = pygame.display.set_mode([width,height])
 screen.fill([255,255,255])
-
+global plotIndex
+plotIndex = 0
 bullets = []
 foes = []
 ownBullets = []
@@ -100,19 +137,22 @@ pygame.key.set_repeat(12,12)
 clock = pygame.time.Clock()
 global score
 global ownDie
+plots = plot_read(1)
 ownDie = False
 score = 0
 maxs = 0
+global proc
+proc = 0
 global dieTime
 #-------------------以下为测试内容------------------------
 #-----------------掉落物drop--------------------
-drop = FractionDrop()
+#drop = FractionDrop()
 #-----------------弹幕类型-----------------------
-shoot = 7
+#shoot = 7
 #------------------怪物移动方式FoeMove,怪物外观BlueFoe-------------------
-foe = FoeMove3(BlueFoe([150,-10],drop), shoot)
+#foe = FoeMove3(BlueFoe([150,-10],drop), shoot)
 #------------------怪物组foes-------------------------
-foes.append(foe)
+#foes.append(foe)
 
 while True:
     for event in pygame.event.get():
@@ -149,6 +189,7 @@ while True:
 
 
     clock.tick(50)
+    plot_process(plots, foes)
     screen.fill([255,255,255])
     b = random.randint(0,20)
     moveAll(own, foes, bullets, ownBullets,drops)

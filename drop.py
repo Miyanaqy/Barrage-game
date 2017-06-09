@@ -39,4 +39,9 @@ class FractionDrop(Drop):
     def die(self, own):
         own.barrage.barUp()
         
-        
+def get_drop(index):
+    if index == 0:
+        drop = UpgradeDrop()
+    elif index == 1:
+        drop = FractionDrop()
+    return drop

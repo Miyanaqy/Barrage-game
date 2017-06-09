@@ -55,13 +55,13 @@ class OwnBullet1(BulletsClass):
     def __init__(self, pos, speed):
         super(OwnBullet1, self).__init__(21,pos)
         self.speed = speed
-        self.atr = 5    
+        self.atr = 10    
 
 class OwnBullet2(BulletsClass):
     def __init__(self, pos, speed):
         super(OwnBullet2, self).__init__(22,pos)
         self.speed = speed
-        self.atr = 3
+        self.atr = 5
 
 #-----------------------------敌机弹幕----------------------------------
 class Shoot1():
@@ -150,7 +150,7 @@ class Barrage():
     def shooting(self, pos, ownBullets):
         self.state[self.index].shooting(pos, ownBullets)
     def barUp(self):
-        if self.index < 4:
+        if self.index < 3:
             self.index += 1
 
 class BarrageOne():
