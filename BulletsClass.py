@@ -152,6 +152,8 @@ class Barrage():
     def barUp(self):
         if self.index < 3:
             self.index += 1
+    def barDown(self):
+        self.index = 0
 
 class BarrageOne():
     def shooting(self, pos, ownBullets):

@@ -38,11 +38,11 @@ class OwnClass():
 
     def die(self):
         self.rect.center = [225,1000]
+        self.barrage.barDown()
         #rq = Rqueue.creatRq()
         #images = []
         #pos = self.rect
         #rq.add(images,pos,len(images))
-        pass
 
 class OwnShadow():
     def __init__(self):

@@ -125,7 +125,7 @@ width, height = (450,700)
 screen = pygame.display.set_mode([width,height])
 screen.fill([255,255,255])
 global plotIndex
-plotIndex = 0
+plotIndex = 1
 bullets = []
 foes = []
 ownBullets = []
