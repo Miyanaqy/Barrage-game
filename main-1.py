@@ -191,7 +191,6 @@ while True:
     clock.tick(50)
     plot_process(plots, foes)
     screen.fill([255,255,255])
-    b = random.randint(0,20)
     moveAll(own, foes, bullets, ownBullets,drops)
     draw(own,foes,bullets,ownBullets,drops)
     if ownDie:

@@ -25,34 +25,69 @@ class Foe():
         else:
             return False
 
-    def die(self):
-        pass
+    def die(self, drops):
+        self.drop.x = self.rect.centerx
+        self.drop.y = self.rect.centery
+        drops.append(self.drop)
 
-class RedFoe(Foe):
+class PinkFoe(Foe):
     def __init__(self, pos, drop):
         images = ['image/foe/foe2_1.png','image/foe/foe2_2.png','image/foe/foe2_3.png','image/foe/foe2_4.png']
-        super(RedFoe, self).__init__(20, images, pos, drop)
+        super(PinkFoe, self).__init__(20, images, pos, drop)
 
 class BlueFoe(Foe):
     def __init__(self, pos, drop):
         images = ['image/foe/foe1_1.png','image/foe/foe1_2.png','image/foe/foe1_3.png','image/foe/foe1_4.png']
         super(BlueFoe, self).__init__(15, images, pos, drop)
+
+class VioletFoe(Foe):
+    def __init__(self, pos, drop):
+        images = ['image/foe/foe3_1.png','image/foe/foe3_2.png','image/foe/foe3_3.png','image/foe/foe3_4.png']
+        super(VioletFoe, self).__init__(25, images, pos, drop)
+
+class RedFoe(Foe):
+    def __init__(self, pos, drop):
+        images = ['image/foe/foe4_1.png','image/foe/foe4_2.png','image/foe/foe4_3.png','image/foe/foe4_4.png']
+        super(RedFoe, self).__init__(30, images, pos, drop)
+    
+class OrangeFoe(Foe):
+    def __init__(self, pos, drop):
+        images = ['image/foe/foe5_1.png','image/foe/foe5_2.png','image/foe/foe5_3.png','image/foe/foe5_4.png']
+        super(OrangeFoe, self).__init__(35, images, pos, drop)
+
+class ssBoss(Foe):
+    def __init__(self, pos, drop):
+        images = ['image/foe/ssBoss_1.png','image/foe/ssBoss_2.png']
+        super(ssBoss, self).__init__(200, images, pos, drop)
+
+class sBoss1(Foe):
+    def __init__(self, pos, drop):
+        images = ['image/foe/sBoss1_1.png','image/foe/sBoss1_2.png','image/foe/sBoss1_3.png','image/foe/sBoss1_4.png']
+        super(sBoss1, self).__init__(500, images, pos, drop)
+
+class sBoss2(Foe):
+    def __init__(self, pos, drop):
+        images = ['image/foe/sBoss2_1.png','image/foe/sBoss2_2.png','image/foe/sBoss2_3.png','image/foe/sBoss2_4.png']
+        super(sBoss2, self).__init__(500, images, pos, drop)
         
-        
-    def die(self, drops):
-        #rq = Rqueue.creatRq()
-        #images = []
-        #pos = self.rect
-        #rq.add(images,pos,len(images))
-        self.drop.x = self.rect.centerx
-        self.drop.y = self.rect.centery
-        drops.append(self.drop)
 
 def get_foe(index, pos, drop):
     if index == 0:
-        foe = RedFoe(pos, drop)
-    elif index ==1:
+        foe = PinkFoe(pos, drop)
+    elif index == 1:
         foe = BlueFoe(pos, drop)
+    elif index == 2:
+        foe = VioletFoe(pos, drop)
+    elif index == 3:
+        foe = RedFoe(pos, drop)
+    elif index == 4:
+        foe = OrangeFoe(pos, drop)
+    elif index == 5:
+        foe = ssBoss(pos, drop)
+    elif index == 6:
+        foe = sBoss1(pos, drop)
+    elif index == 7:
+        foe = sBoss2(pos, drop)
     return foe
 
 #--------------------------------怪物的移动类----------------------------
