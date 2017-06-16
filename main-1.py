@@ -145,7 +145,15 @@ def game_interface(clock):
                 sys.exit()
             if times > 175:
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    pass
+                    if event.pos[0] > start_rect.left and event.pos[0] < start_rect.right:
+                        if event.pos[1] > start_rect.top and event.pos[1] < start_rect.bottom:
+                            return
+                    if event.pos[0] > setting_rect.left and event.pos[0] < setting_rect.right:
+                        if event.pos[1] > setting_rect.top and event.pos[1] < setting_rect.bottom:
+                            pass
+                    if event.pos[0] > over_rect.left and event.pos[0] < over_rect.right:
+                        if event.pos[1] > over_rect.top and event.pos[1] < over_rect.bottom:
+                            sys.exit()
                 
         clock.tick(50)
         times += 1
