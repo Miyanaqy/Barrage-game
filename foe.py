@@ -95,6 +95,10 @@ class FoeMove():
     def __init__(self, foe):
         self.foe = foe
         self.index = 0
+        if self.foe.rect.centerx > 225:
+            self.direction = -1
+        else:
+            self.direction = 1
     def coll(self):
         self.foe.coll()
 
@@ -106,8 +110,7 @@ class FoeMove1(FoeMove):
         elif self.index >= 45 and self.index < 225:
             sp = Speed((360 - self.index * 2), 160)
             self.foe.rect.center = [sp[0] + 225, sp[1] + 210]
-            if self.index % 10 == 0:
-                self.shoot.shooting(self.foe.rect.center, own.rect.center, bullets)
+            self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets)
         elif self.index >= 225:
             self.foe.rect.centerx -= 5
         self.foe.image = pygame.image.load(self.foe.images[int((self.index%4))])
@@ -120,8 +123,7 @@ class FoeMove2(FoeMove):
         elif self.index >= 45 and self.index < 225:
             sp = Speed(self.index * 2+180, 160)
             self.foe.rect.center = [sp[0] + 225, sp[1] + 210]
-            if self.index % 10 == 0:
-                self.shoot.shooting(self.foe.rect.center, own.rect.center, bullets)
+            self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets)
         elif self.index >= 225:
             self.foe.rect.centerx += 5
         self.foe.image = pygame.image.load(self.foe.images[int((self.index%4))])
@@ -132,14 +134,13 @@ class FoeMove3(FoeMove):
         if self.index < 50:
             self.foe.rect.centery += 2
         if self.index >= 50 and self.index < 500:
-            if self.index % 15 == 0:
-                self.shoot.shooting(self.foe.rect.center, own.rect.center, bullets)
+            self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets)
         if self.index > 500:
             self.foe.rect.centery += 3
             if self.index % 15 == 0:
-                self.shoot.shooting(self.foe.rect.center, own.rect.center, bullets)
+                self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets)
+        self.foe.image = pygame.image.load(self.foe.images[int((self.index%4))])
 
-#----------未完成------------------
 class FoeMove4(FoeMove):
     def move (self, own, bullets):
         self.index += 1
@@ -149,8 +150,8 @@ class FoeMove4(FoeMove):
             self.cen = self.foe.rect.centerx
         elif self.index > 50 and self.index < 500:
             x = 80 * math.sin((self.index-50) * math.pi/180)
-            self.foe.rect.centerx = self.cen + x
-            self.shoot.shooting(self.foe.rect.center, own.rect.center, bullets, self.foe)
+            self.foe.rect.centerx = self.cen + x * self.direction
+            self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets, self.foe)
         elif self.index == 500:
             ang = Angle(self.foe.rect.center, own.rect.center)
             sp = Speed(ang)
@@ -158,6 +159,75 @@ class FoeMove4(FoeMove):
         elif self.index > 500:
             self.foe.rect.centery += self.speed[0]
             self.foe.rect.centerx += self.speed[1]
+        self.foe.image = pygame.image.load(self.foe.images[int((self.index%4))])
+
+class FoeMove5(FoeMove):
+    def move(self, own, bullets):
+        self.index += 1
+        if self.index < 50:
+            self.foe.rect.centerx += 2 *self.direction
+            self.foe.rect.centery += 2
+        elif self.index >= 50 and self.index <= 500:
+            if index % 50 == 0:
+                self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets)
+        elif self.index >500:
+            self.foe.rect.centerx -= 2 * self.direction
+            self.foe.rect.centery += 2
+        self.foe.image = pygame.image.load(self.foe.images[int((self.index%4))])
+
+class FoeMove6(FoeMove):
+    def move(self, own, bullets):
+        self.index += 1
+        if self.index < 50:
+            self.foe.rect.centery += 2
+        elif self.index == 50:
+            ang = (self.foe.rect.center, own.rect.center)
+            sp = (ang, 8)
+        elif self.index > 50:
+            self.foe.rect.centerx += sp[0]
+            self.foe.rect.centery += sp[1]
+            self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets)
+        self.foe.image = pygame.image.load(self.foe.images[int((self.index%4))])
+
+class FoeMove7(FoeMove):
+    def move(self, own, bullets):
+        self.index += 1
+        self.foe.rect.centery -= 2
+        self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets)
+        self.foe.image = pygame.image.load(self.foe.images[int((self.index%4))])
+
+class FoeMove8(FoeMove):
+    def move(self, own, bullets):
+        self.index += 1
+        if self.index == 1:
+            x = 6
+            y = 4
+        if self.index < 70:
+            x = x * 0.9
+            y = y * 0.9
+            self.foe.rect.centerx += x
+            self.foe.rect.centery += y
+            self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets)
+        else:
+            x = x * 1.1
+            y = y * 1.1
+            self.foe.rect.centerx += x
+            self.foe.rect.centery += y
+            self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets)
+        self.foe.image = pygame.image.load(self.foe.images[int((self.index%4))])
+
+class FoeMove10(FoeMove):
+    def move(self, own, bullets):
+        self.index += 1
+        if self.index < 40:
+            self.foe.rect.centery += 2
+        elif self.index >= 40:
+            self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets, self.foe)
+
+
+class FoeMoveBoss(FoeMove):
+    def move(self, own, bullets):
+        pass
 
 def get_foeMove(index, foe):
     if index == 0:
@@ -168,5 +238,13 @@ def get_foeMove(index, foe):
         foeMove = FoeMove3(foe)
     elif index == 3:
         foeMove = FoeMove4(foe)
+    elif index == 4:
+        foeMove = FoeMove5(foe)
+    elif index == 5:
+        foeMove = FoeMove6(foe)
+    elif index == 6:
+        foeMove = FoeMove7(foe)
+    elif index == 7:
+        foeMove = FoeMove8(foe)
     
     return foeMove

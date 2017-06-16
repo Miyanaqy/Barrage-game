@@ -65,45 +65,49 @@ class OwnBullet2(BulletsClass):
 
 #-----------------------------敌机弹幕----------------------------------
 class Shoot1():
-    def shooting(self, pos, epos, bullets, foe = None):
+    def shooting(self, index, pos, epos, bullets, foe = None):
         #s = math.sqrt((epos[0] - pos[0])**2 + (epos[1] - pos[1])**2) / 12
-        ang = Angle(pos, epos)
-        sp = Speed(ang)
-        bullet = BulletsClass(1, pos)
-        bullet.speed = sp
-        bullets.append(bullet)
-
-class Shoot2():
-    def shooting(self, pos, epos, bullets, foe = None):
-        for i in range(18):
+        if index % 8 == 0:
             ang = Angle(pos, epos)
-            sp = Speed(ang + i*20)
-            bullet = BulletsClass(9, pos)
+            sp = Speed(ang)
+            bullet = BulletsClass(1, pos)
             bullet.speed = sp
             bullets.append(bullet)
 
+class Shoot2():
+    def shooting(self, index, pos, epos, bullets, foe = None):
+        if index %15 == 0:
+            for i in range(18):
+                ang = Angle(pos, epos)
+                sp = Speed(ang + i*20)
+                bullet = BulletsClass(9, pos)
+                bullet.speed = sp
+                bullets.append(bullet)
+
 class Shoot3():
-    def shooting(self, pos, epos, bullets, foe = None):
-        apos = random.randint(0, 360)
-        rpos = random.randint(0, 50)
-        p = Speed(apos, rpos)
-        pos = [pos[0] + p[0], pos[1] + p[1]]
-        ang = Angle(pos, epos)
-        sp = Speed(ang)
-        bullet = BulletsClass(5, pos)
-        bullet.speed = sp
-        bullets.append(bullet)
+    def shooting(self,index,  pos, epos, bullets, foe = None):
+        if index % 3 == 0:
+            apos = random.randint(0, 360)
+            rpos = random.randint(0, 50)
+            p = Speed(apos, rpos)
+            pos = [pos[0] + p[0], pos[1] + p[1]]
+            ang = Angle(pos, epos)
+            sp = Speed(ang)
+            bullet = BulletsClass(5, pos)
+            bullet.speed = sp
+            bullets.append(bullet)
 
 class Shoot4():
-    def shooting(self, pos, epos, bullets, foe = None):
-        ang = Angle(pos, epos)
-        sp = Speed(ang, 3)
-        bullet = BulletsClass(18, pos)
-        bullet.speed = sp
-        bullets.append(bullet)
+    def shooting(self, index, pos, epos, bullets, foe = None):
+        if index % 25 == 0:
+            ang = Angle(pos, epos)
+            sp = Speed(ang, 3)
+            bullet = BulletsClass(18, pos)
+            bullet.speed = sp
+            bullets.append(bullet)
 
 class Shoot5():
-    def shooting(self, pos, epos, bullets, foe = None):
+    def shooting(self, index, pos, epos, bullets, foe = None):
         ang = Angle(pos, epos)
         for i in range(3):
             sp = Speed(ang+(i-1)*15)
@@ -112,27 +116,33 @@ class Shoot5():
             bullets.append(bullet)
 
 class Shoot6():
-    def shooting(self, pos, epos, bullets, foe = None):
+    def shooting(self, index, pos, epos, bullets, foe = None):
         bullet = LaserBullets(12, [pos[0], pos[1]+10], foe)
         bullet.speed = [0,15]
         bullets.append(bullet)
 
 class Shoot7():
-    def shooting(self, pos, epos, bullets, foe = None):
-        for i in range(18):
-            sp = Speed(i*20)
-            bullet = XDeviationBullets(8, pos, 0.1)
-            bullet.speed = sp
-            bullets.append(bullet)
+    def shooting(self, index, pos, epos, bullets, foe = None):
+        if index % 15 == 0:
+            for i in range(18):
+                sp = Speed(i*20)
+                bullet = XDeviationBullets(8, pos, 0.1)
+                bullet.speed = sp
+                bullets.append(bullet)
 
 class Shoot8():
-    def shooting(self, pos, epos, bullets, foe = None):
-        for i in range(18):
-            ang = i * 20
-            sp = Speed(ang)
-            bullet = CurveBullets(7, pos, ang)
-            bullet.speed = sp
-            bullets.append(bullet)
+    def shooting(self, index, pos, epos, bullets, foe = None):
+        if index % 15 == 0:
+            for i in range(18):
+                ang = i * 20
+                sp = Speed(ang)
+                bullet = CurveBullets(7, pos, ang)
+                bullet.speed = sp
+                bullets.append(bullet)
+
+class Shoot9():
+    def shooting(self, index, pos, epos, bullets, foe = None):
+        pass
 
 class ShootMode():
     shoots = [Shoot1(),Shoot2(),Shoot3(),Shoot4(),Shoot5(),Shoot6(),Shoot7(),Shoot8()]

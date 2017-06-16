@@ -118,6 +118,75 @@ def rqueueDraw(rq):
         if draw.bool:
             break
 
+def game_interface(clock):
+    interface = pygame.image.load('image/interface/game_start.jpg')
+    title = pygame.image.load('image/interface/title.png')
+    start = pygame.image.load('image/interface/start.png')
+    setting = pygame.image.load('image/interface/setting.png')
+    over = pygame.image.load('image/interface/over.png')
+    interface_rect = interface.get_rect()
+    interface_rect.left, interface_rect.top = [0,0]
+    title_rect = title.get_rect()
+    title_rect.left, title_rect.top = [58,40]
+    start_rect = start.get_rect()
+    start_rect.left, start_rect.top = [35,565]
+    setting_rect = setting.get_rect()
+    setting_rect.left, setting_rect.top = [158,605]
+    over_rect = over.get_rect()
+    over_rect.left, over_rect.top = [285,646]
+    
+    trans_interface = pygame.Surface([450,700])
+    trans_interface.blit(interface,[0,0])
+    
+    times = 0
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            if times > 175:
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    pass
+                
+        clock.tick(50)
+        times += 1
+        if times < 50:
+        #screen.blit(interface, [0,0])
+            screen.fill([255,255,255])
+            trans_interface.set_alpha(times*5+10)
+            screen.blit(trans_interface, interface_rect)
+        #screen.blit(title, [58,40])
+        #screen.blit(start, [35,565])
+        #screen.blit(setting, [158,605])
+        #screen.blit(over, [285,646])
+        else:
+            screen.blit(interface, interface_rect)
+        if times > 150 and times <= 175:
+            screen.blit(over, [over_rect.left+12-(times-150)/2,over_rect.top])
+            trans_interface.set_alpha(255-(times-150)*10)
+            screen.blit(trans_interface, interface_rect)
+        elif times > 175:
+            screen.blit(over, over_rect)
+        if times > 125 and times <= 150:
+            screen.blit(setting,[setting_rect.left+12-(times-125)/2,setting_rect.top])
+            trans_interface.set_alpha(255-(times-125)*10)
+            screen.blit(trans_interface, interface_rect)
+        elif times > 150:
+            screen.blit(setting, setting_rect)
+        if times > 100 and times <= 125:
+            screen.blit(start,[start_rect.left+12-(times-100)/2,start_rect.top])
+            trans_interface.set_alpha(255-(times-100)*10)
+            screen.blit(trans_interface, interface_rect)
+        elif times > 125:
+            screen.blit(start, start_rect)
+        if times > 50 and times <= 100:
+            screen.blit(title, title_rect)
+            trans_interface.set_alpha(255-(times-50)*5)
+            screen.blit(trans_interface, interface_rect)
+        elif times > 100:
+            screen.blit(title,title_rect)
+
+        pygame.display.flip()
+        
 pygame.init()
 global width
 global height
@@ -153,7 +222,7 @@ global dieTime
 #foe = FoeMove3(BlueFoe([150,-10],drop), shoot)
 #------------------怪物组foes-------------------------
 #foes.append(foe)
-
+game_interface(clock)
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

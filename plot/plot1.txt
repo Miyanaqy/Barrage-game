@@ -1,4 +1,4 @@
-<<generate Time(50/second), barrage, foe, drop, X(pos[0]), Y(pos[1]), foeMove>>
+Time(50/second), barrage, foe, drop, X(pos[0]), Y(pos[1]), foeMove>>
 120,0,0,0,460,50,0
 135,0,0,1,460,50,0
 150,0,0,0,460,50,0
