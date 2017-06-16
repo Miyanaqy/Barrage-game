@@ -149,7 +149,7 @@ class FoeMove4(FoeMove):
             self.cen = self.foe.rect.centerx
         elif self.index > 50 and self.index < 500:
             x = 80 * math.sin((self.index-50) * math.pi/180)
-            self.foe.rect.centerx = self.cen + x
+            self.foe.rect.centerx = self.cen + x * self.direction
             self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets, self.foe)
         elif self.index == 500:
             ang = Angle(self.foe.rect.center, own.rect.center)
@@ -177,7 +177,7 @@ class FoeMove6(FoeMove):
         self.index += 1
         if self.index < 50:
             self.foe.rect.centery += 2
-        elif self.index = 50:
+        elif self.index == 50:
             ang = (self.foe.rect.center, own.rect.center)
             sp = (ang, 8)
         elif self.index > 50:
@@ -191,13 +191,13 @@ class FoeMove7(FoeMove):
         self.foe.rect.centery -= 2
         self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets)
 
-class FoeMove7(FoeMove):
+class FoeMove8(FoeMove):
     def move(self, own, bullets):
         self.index += 1
-        if self.index = 1:
+        if self.index == 1:
             x = 6
             y = 4
-        if self.index < 50:
+        if self.index < 70:
             x = x * 0.9
             y = y * 0.9
             self.foe.rect.centerx += x
@@ -236,5 +236,9 @@ def get_foeMove(index, foe):
         foeMove = FoeMove5(foe)
     elif index == 5:
         foeMove = FoeMove6(foe)
+    elif index == 6:
+        foeMove = FoeMove7(foe)
+    elif index == 7:
+        foeMove = FoeMove8(foe)
     
     return foeMove
