@@ -33,7 +33,7 @@ class Foe():
 class PinkFoe(Foe):
     def __init__(self, pos, drop):
         images = ['image/foe/foe2_1.png','image/foe/foe2_2.png','image/foe/foe2_3.png','image/foe/foe2_4.png']
-        super(PinkFoe, self).__init__(20, images, pos, drop)
+        super(PinkFoe, self).__init__(10, images, pos, drop)
 
 class BlueFoe(Foe):
     def __init__(self, pos, drop):
