@@ -108,12 +108,13 @@ class Shoot4():
 
 class Shoot5():
     def shooting(self, index, pos, epos, bullets, foe = None):
-        ang = Angle(pos, epos)
-        for i in range(3):
-            sp = Speed(ang+(i-1)*15)
-            bullet = BulletsClass(9, pos)
-            bullet.speed = sp
-            bullets.append(bullet)
+        if index % 14 == 0:
+            ang = Angle(pos, epos)
+            for i in range(3):
+                sp = Speed(ang+(i-1)*15)
+                bullet = BulletsClass(9, pos)
+                bullet.speed = sp
+                bullets.append(bullet)
 
 class Shoot6():
     def shooting(self, index, pos, epos, bullets, foe = None):

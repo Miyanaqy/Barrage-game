@@ -70,12 +70,11 @@ def colli1(own, foes, bullets, drops):
     global dieTime
     for foe in foes:
         if collision(own, foe.foe, -10):
-            die = foe.foe.coll(own.atr, drops)
+            foe.coll(own.atr, drops, foes)
             own.die()
             ownDie = True
             ownShadow.rect.center = [225,730]#初始化位置
             dieTime = 0
-            if die: foes.remove(foe)
     for bullet in bullets:
         if collision(own, bullet, -10):
             bullets.remove(bullet)
@@ -93,8 +92,7 @@ def colli2(foes, ownBullets):
     for foe in foes:
         for bullet in ownBullets:
             if collision(foe.foe, bullet):
-                die = foe.foe.coll(bullet.atr, drops)
-                if die: foes.remove(foe)
+                foe.coll(bullet.atr, drops, foes)
                 bullet.die(ownBullets)
 
 def draw(own, foes, bullets, ownBullets, drop):
@@ -202,6 +200,16 @@ width, height = (450,700)
 screen = pygame.display.set_mode([width,height])
 screen.fill([255,255,255])
 global plotIndex
+global score
+global ownDie
+ownDie = False
+global dieTime
+global proc
+background = pygame.image.load('image/interface/background.jpg')
+background_rect = background.get_rect()
+background_rect.left, background_rect.top = (0, -1300)
+score = 0
+proc = 0
 plotIndex = 1
 bullets = []
 foes = []
@@ -212,15 +220,9 @@ ownShadow = OwnShadow()
 rq = Rqueue.creatRq()
 pygame.key.set_repeat(12,12)
 clock = pygame.time.Clock()
-global score
-global ownDie
 plots = plot_read(1)
-ownDie = False
-score = 0
 maxs = 0
-global proc
 proc = 0
-global dieTime
 #-------------------以下为测试内容------------------------
 #-----------------掉落物drop--------------------
 #drop = FractionDrop()
@@ -267,7 +269,12 @@ while True:
 
     clock.tick(50)
     plot_process(plots, foes)
-    screen.fill([255,255,255])
+    background_rect.centery += 1
+    screen.blit(background,background_rect)
+    if background_rect.top > 0:
+        background_rect.top = -2000
+    if background_rect.top < -1300:
+        screen.blit(background, [0,background_rect.top+2000])
     moveAll(own, foes, bullets, ownBullets,drops)
     draw(own,foes,bullets,ownBullets,drops)
     if ownDie:

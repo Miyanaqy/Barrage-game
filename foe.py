@@ -99,8 +99,12 @@ class FoeMove():
             self.direction = -1
         else:
             self.direction = 1
-    def coll(self):
-        self.foe.coll()
+    def coll(self, atr, drops, foes):
+        if self.foe.coll(atr, drops):
+            try:
+                foes.remove(self)
+            except ValueError as e:
+                print(e)
 
 class FoeMove1(FoeMove):
     def move(self, own, bullets):
@@ -125,7 +129,7 @@ class FoeMove2(FoeMove):
             self.foe.rect.center = [sp[0] + 225, sp[1] + 210]
             self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets)
         elif self.index >= 225:
-            self.foe.rect.centerx += 5
+            self.foe.rect.centerx += 5 * self.direction
         self.foe.image = pygame.image.load(self.foe.images[int((self.index%4))])
 
 class FoeMove3(FoeMove):
@@ -168,7 +172,7 @@ class FoeMove5(FoeMove):
             self.foe.rect.centerx += 2 *self.direction
             self.foe.rect.centery += 2
         elif self.index >= 50 and self.index <= 500:
-            if index % 50 == 0:
+            if self.index % 50 == 0:
                 self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets)
         elif self.index >500:
             self.foe.rect.centerx -= 2 * self.direction
@@ -216,13 +220,14 @@ class FoeMove8(FoeMove):
             self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets)
         self.foe.image = pygame.image.load(self.foe.images[int((self.index%4))])
 
-class FoeMove10(FoeMove):
+class FoeMove11(FoeMove):
     def move(self, own, bullets):
         self.index += 1
         if self.index < 40:
             self.foe.rect.centery += 2
         elif self.index >= 40:
             self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets, self.foe)
+        self.foe.image = pygame.image.load(self.foe.images[int((self.index%2))])
 
 
 class FoeMoveBoss(FoeMove):
@@ -246,5 +251,7 @@ def get_foeMove(index, foe):
         foeMove = FoeMove7(foe)
     elif index == 7:
         foeMove = FoeMove8(foe)
+    elif index ==10:
+        foeMove = FoeMove11(foe)
     
     return foeMove
