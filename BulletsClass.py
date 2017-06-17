@@ -51,6 +51,15 @@ class CurveBullets(BulletsClass):
         self.speed = Speed(self.angle)
         super(CurveBullets, self).move()
 
+class DroopBullets(BulletsClass):
+    def move(self):
+        self.speed[0] = self.speed[0] * 0.99
+        self.speed[1] = self.speed[1] * 1.01
+        self.x += self.speed[0]
+        self.y += self.speed[1]
+        self.rect.centerx = self.x
+        self.rect.centery = self.y
+
 class OwnBullet1(BulletsClass):
     def __init__(self, pos, speed):
         super(OwnBullet1, self).__init__(21,pos)
@@ -143,11 +152,17 @@ class Shoot8():
 
 class Shoot9():
     def shooting(self, index, pos, epos, bullets, foe = None):
-        pass
+        if index % 2 == 0:
+            x = random.randint(1,12)
+            x = x - 6
+            bullet = DroopBullets(11, [pos[0] + x, pos[1]])
+            bullet.speed = [x, 1]
+            bullets.append(bullet)
+            
 
 class ShootMode():
     shoots = [Shoot1(),Shoot2(),Shoot3(),Shoot4(),Shoot5(),Shoot6(),Shoot7(),Shoot8()]
-    
+    shoots.append(Shoot9())
     @classmethod
     def get_shoot(cls,shoot):
         return ShootMode.shoots[shoot]

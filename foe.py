@@ -117,7 +117,7 @@ class FoeMove1(FoeMove):
             self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets)
         elif self.index >= 225:
             self.foe.rect.centerx -= 5
-        self.foe.image = pygame.image.load(self.foe.images[int((self.index%4))])
+        self.foe.image = pygame.image.load(self.foe.images[int(((self.index%8) / 2))])
         
 class FoeMove2(FoeMove):
     def move(self, own, bullets):
@@ -130,7 +130,7 @@ class FoeMove2(FoeMove):
             self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets)
         elif self.index >= 225:
             self.foe.rect.centerx += 5 * self.direction
-        self.foe.image = pygame.image.load(self.foe.images[int((self.index%4))])
+        self.foe.image = pygame.image.load(self.foe.images[int(((self.index%8) / 2))])
 
 class FoeMove3(FoeMove):
     def move(self, own, bullets):
@@ -143,7 +143,7 @@ class FoeMove3(FoeMove):
             self.foe.rect.centery += 3
             if self.index % 15 == 0:
                 self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets)
-        self.foe.image = pygame.image.load(self.foe.images[int((self.index%4))])
+        self.foe.image = pygame.image.load(self.foe.images[int(((self.index%8) / 2))])
 
 class FoeMove4(FoeMove):
     def move (self, own, bullets):
@@ -163,7 +163,7 @@ class FoeMove4(FoeMove):
         elif self.index > 500:
             self.foe.rect.centery += self.speed[0]
             self.foe.rect.centerx += self.speed[1]
-        self.foe.image = pygame.image.load(self.foe.images[int((self.index%4))])
+        self.foe.image = pygame.image.load(self.foe.images[int(((self.index%8) / 2))])
 
 class FoeMove5(FoeMove):
     def move(self, own, bullets):
@@ -177,7 +177,7 @@ class FoeMove5(FoeMove):
         elif self.index >500:
             self.foe.rect.centerx -= 2 * self.direction
             self.foe.rect.centery += 2
-        self.foe.image = pygame.image.load(self.foe.images[int((self.index%4))])
+        self.foe.image = pygame.image.load(self.foe.images[int(((self.index%8) / 2))])
 
 class FoeMove6(FoeMove):
     def move(self, own, bullets):
@@ -191,34 +191,34 @@ class FoeMove6(FoeMove):
             self.foe.rect.centerx += sp[0]
             self.foe.rect.centery += sp[1]
             self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets)
-        self.foe.image = pygame.image.load(self.foe.images[int((self.index%4))])
+        self.foe.image = pygame.image.load(self.foe.images[int(((self.index%8) / 2))])
 
 class FoeMove7(FoeMove):
     def move(self, own, bullets):
         self.index += 1
         self.foe.rect.centery -= 2
         self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets)
-        self.foe.image = pygame.image.load(self.foe.images[int((self.index%4))])
+        self.foe.image = pygame.image.load(self.foe.images[int(((self.index%8) / 2))])
 
 class FoeMove8(FoeMove):
     def move(self, own, bullets):
         self.index += 1
         if self.index == 1:
-            x = 6
-            y = 4
+            self.x = 6
+            self.y = 4
         if self.index < 70:
-            x = x * 0.9
-            y = y * 0.9
-            self.foe.rect.centerx += x
-            self.foe.rect.centery += y
+            self.x = self.x * 0.9
+            self.y = self.y * 0.9
+            self.foe.rect.centerx += self.x
+            self.foe.rect.centery += self.y
             self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets)
         else:
-            x = x * 1.1
-            y = y * 1.1
-            self.foe.rect.centerx += x
-            self.foe.rect.centery += y
+            self.x = self.x * 1.1
+            self.y = self.y * 1.1
+            self.foe.rect.centerx += self.x
+            self.foe.rect.centery += self.y
             self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets)
-        self.foe.image = pygame.image.load(self.foe.images[int((self.index%4))])
+        self.foe.image = pygame.image.load(self.foe.images[int(((self.index%8) / 2))])
 
 class FoeMove11(FoeMove):
     def move(self, own, bullets):
@@ -227,7 +227,7 @@ class FoeMove11(FoeMove):
             self.foe.rect.centery += 2
         elif self.index >= 40:
             self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets, self.foe)
-        self.foe.image = pygame.image.load(self.foe.images[int((self.index%2))])
+        self.foe.image = pygame.image.load(self.foe.images[int(((self.index%2) / 2))])
 
 
 class FoeMoveBoss(FoeMove):
