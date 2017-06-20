@@ -43,32 +43,32 @@ class BlueFoe(Foe):
 class VioletFoe(Foe):
     def __init__(self, pos, drop):
         images = ['image/foe/foe3_1.png','image/foe/foe3_2.png','image/foe/foe3_3.png','image/foe/foe3_4.png']
-        super(VioletFoe, self).__init__(25, images, pos, drop)
+        super(VioletFoe, self).__init__(30, images, pos, drop)
 
 class RedFoe(Foe):
     def __init__(self, pos, drop):
         images = ['image/foe/foe4_1.png','image/foe/foe4_2.png','image/foe/foe4_3.png','image/foe/foe4_4.png']
-        super(RedFoe, self).__init__(30, images, pos, drop)
+        super(RedFoe, self).__init__(60, images, pos, drop)
     
 class OrangeFoe(Foe):
     def __init__(self, pos, drop):
         images = ['image/foe/foe5_1.png','image/foe/foe5_2.png','image/foe/foe5_3.png','image/foe/foe5_4.png']
-        super(OrangeFoe, self).__init__(35, images, pos, drop)
+        super(OrangeFoe, self).__init__(150, images, pos, drop)
 
 class ssBoss(Foe):
     def __init__(self, pos, drop):
         images = ['image/foe/ssBoss_1.png','image/foe/ssBoss_2.png']
-        super(ssBoss, self).__init__(200, images, pos, drop)
+        super(ssBoss, self).__init__(400, images, pos, drop)
 
 class sBoss1(Foe):
     def __init__(self, pos, drop):
         images = ['image/foe/sBoss1_1.png','image/foe/sBoss1_2.png','image/foe/sBoss1_3.png','image/foe/sBoss1_4.png']
-        super(sBoss1, self).__init__(500, images, pos, drop)
+        super(sBoss1, self).__init__(1000, images, pos, drop)
 
 class sBoss2(Foe):
     def __init__(self, pos, drop):
         images = ['image/foe/sBoss2_1.png','image/foe/sBoss2_2.png','image/foe/sBoss2_3.png','image/foe/sBoss2_4.png']
-        super(sBoss2, self).__init__(500, images, pos, drop)
+        super(sBoss2, self).__init__(1000, images, pos, drop)
         
 
 def get_foe(index, pos, drop):
@@ -230,7 +230,29 @@ class FoeMove11(FoeMove):
         self.foe.image = pygame.image.load(self.foe.images[int(((self.index%2) / 2))])
 
 
-class FoeMoveBoss(FoeMove):
+class BossMove1(FoeMove):
+    def move(self, own, bullets):
+        pass
+    def replaceMove(self):
+        bossMove = BossMove2(self.foe)
+        return bossMove
+
+    
+class BossMove2(FoeMove):
+    def move(self, own, bullets):
+        pass
+    def replaceMove(self):
+        bossMove = BossMove3(self.foe)
+        return bossMove
+
+class BossMove3(FoeMove):
+    def move(self, own, bullets):
+        pass
+    def replaceMove(self):
+        bossMove = BossMove4(self.foe)
+        return bossMove
+
+class BossMove4(FoeMove):
     def move(self, own, bullets):
         pass
 

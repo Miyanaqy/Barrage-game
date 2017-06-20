@@ -168,6 +168,45 @@ class ShootMode():
         return ShootMode.shoots[shoot]
 
 
+#---------------------------Boss弹幕--------------------------------------
+
+class BossShoot1():
+    def shooting(self, index, pos, epos, bullets, foe = None):
+        pass
+
+class BossShoot2():
+    def shooting(self, index, pos, epos, bullets, foe = None):
+        pass
+
+class BossShoot3():
+    def shooting(self, index, pos, epos, bullets, foe = None):
+        pass
+
+class BossShoot4():
+    def shooting(self, index, pos, epos, bullets, foe = None):
+        pass
+
+class BossShoot5():
+    def shooting(self, index, pos, epos, bullets, foe = None):
+        pass
+
+class BossShoot6():
+    def shooting(self, index, pos, epos, bullets, foe = None):
+        pass
+
+class BossShoot7():
+    def shooting(self, index, pos, epos, bullets, foe = None):
+        pass
+
+class BossShoot8():
+    def shooting(self, index, pos, epos, bullets, foe = None):
+        pass
+
+class BossShootMode():
+    shoots = [BossShoot1(),BossShoot2(),BossShoot3(),BossShoot4(),BossShoot5(),BossShoot6(),BossShoot7(),BossShoot8()]
+    @classmethod
+    def get_shoot(cls,shoot):
+        return BossShootMode.shoots[shoot]
 #---------------------------自机弹幕--------------------------------------
 class Barrage():
     def __init__(self):
