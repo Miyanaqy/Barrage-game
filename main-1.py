@@ -24,19 +24,20 @@ def plot_process(plots, foes):
         param = plots[plotIndex].split(',')
         if proc == int(param[0]):
             print(param)
-            creatFoe(param, foes)
+            foe = creatFoe(param)
+            foes.append(foe)
             plotIndex += 1
         else:
             return
 
-def creatFoe(param, foes):
+def creatFoe(param):
     shoot = ShootMode.get_shoot(int(param[1]))
     pos = [int(param[4]), int(param[5])]
     drop = get_drop(int(param[3]))
     foe = get_foe(int(param[2]), pos, drop)
     foeMove = get_foeMove(int(param[6]), foe)
     foeMove.shoot = shoot
-    foes.append(foeMove)
+    return foeMove
     
 #---------------------------物体移动--------------------------------
 def moveAll(own, foes, bullets, ownBullets, drops):
@@ -72,16 +73,10 @@ def colli1(own, foes, bullets, drops):
         if collision(own, foe.foe, -10):
             foe.coll(own.atr, drops, foes)
             own.die()
-            ownDie = True
-            ownShadow.rect.center = [225,730]#初始化位置
-            dieTime = 0
     for bullet in bullets:
         if collision(own, bullet, -10):
             bullets.remove(bullet)
             own.die()
-            ownDie = True
-            ownShadow.rect.center = [225,730]
-            dieTime = 0
     for drop in drops:
         if collision(own, drop, 30):
             #drops.remove(drop)
@@ -92,7 +87,9 @@ def colli2(foes, ownBullets):
     for foe in foes:
         for bullet in ownBullets:
             if collision(foe.foe, bullet):
-                foe.coll(bullet.atr, drops, foes)
+                replace = foe.coll(bullet.atr, drops, foes)
+                if replace:
+                    foe = foe.replaceMove()
                 bullet.die(ownBullets)
 
 def draw(own, foes, bullets, ownBullets, drop):
@@ -215,7 +212,7 @@ bullets = []
 foes = []
 ownBullets = []
 drops = []
-own = OwnClass([250,550], width/2, height/2, ownBullets)
+own = OwnClass([250,730], width/2, height/2, ownBullets)
 ownShadow = OwnShadow()
 rq = Rqueue.creatRq()
 pygame.key.set_repeat(12,12)
@@ -277,13 +274,10 @@ while True:
         screen.blit(background, [0,background_rect.top+2000])
     moveAll(own, foes, bullets, ownBullets,drops)
     draw(own,foes,bullets,ownBullets,drops)
-    if ownDie:
-        dieTime += 1
-        ownShadow.move()
-        screen.blit(ownShadow.image, ownShadow.rect)
-        if dieTime > 30:
-            own.rect.center = ownShadow.rect.center
-            ownDie = False
+    if own.dieTime <= 100:
+        own.dieTime += 1
+        if own.dieTime < 30:
+            own.rect.centery -= 3
     pygame.display.flip()
     
 

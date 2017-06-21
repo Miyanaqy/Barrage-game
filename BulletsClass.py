@@ -85,7 +85,7 @@ class Shoot1():
 
 class Shoot2():
     def shooting(self, index, pos, epos, bullets, foe = None):
-        if index %15 == 0:
+        if index %25 == 0:
             for i in range(18):
                 ang = Angle(pos, epos)
                 sp = Speed(ang + i*20)
@@ -95,7 +95,7 @@ class Shoot2():
 
 class Shoot3():
     def shooting(self,index,  pos, epos, bullets, foe = None):
-        if index % 3 == 0:
+        if index % 6 == 0:
             apos = random.randint(0, 360)
             rpos = random.randint(0, 50)
             p = Speed(apos, rpos)
@@ -108,7 +108,7 @@ class Shoot3():
 
 class Shoot4():
     def shooting(self, index, pos, epos, bullets, foe = None):
-        if index % 25 == 0:
+        if index % 40 == 0:
             ang = Angle(pos, epos)
             sp = Speed(ang, 3)
             bullet = BulletsClass(18, pos)
@@ -133,7 +133,7 @@ class Shoot6():
 
 class Shoot7():
     def shooting(self, index, pos, epos, bullets, foe = None):
-        if index % 15 == 0:
+        if index % 25 == 0:
             for i in range(18):
                 sp = Speed(i*20)
                 bullet = XDeviationBullets(8, pos, 0.1)
@@ -142,7 +142,7 @@ class Shoot7():
 
 class Shoot8():
     def shooting(self, index, pos, epos, bullets, foe = None):
-        if index % 15 == 0:
+        if index % 25 == 0:
             for i in range(18):
                 ang = i * 20
                 sp = Speed(ang)
@@ -152,7 +152,7 @@ class Shoot8():
 
 class Shoot9():
     def shooting(self, index, pos, epos, bullets, foe = None):
-        if index % 2 == 0:
+        if index % 15 == 0:
             x = random.randint(1,12)
             x = x - 6
             bullet = DroopBullets(11, [pos[0] + x, pos[1]])

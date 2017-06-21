@@ -14,9 +14,6 @@ class Foe():
         self.rect.center = pos
         self.drop = drop
 
-    def reImage(self):
-        return pygame.image.load(self.images[int(self.index / 4) % 4])
-
     def coll(self, atr, drops):
         self.HP -= atr
         if self.HP < 0:
@@ -84,9 +81,9 @@ def get_foe(index, pos, drop):
         foe = OrangeFoe(pos, drop)
     elif index == 5:
         foe = ssBoss(pos, drop)
-    elif index == 6:
+    elif index == 11:
         foe = sBoss1(pos, drop)
-    elif index == 7:
+    elif index == 12:
         foe = sBoss2(pos, drop)
     return foe
 
@@ -229,28 +226,33 @@ class FoeMove11(FoeMove):
             self.shoot.shooting(self.index, self.foe.rect.center, own.rect.center, bullets, self.foe)
         self.foe.image = pygame.image.load(self.foe.images[int(((self.index%2) / 2))])
 
+class BossMove0(FoeMove):
+    def move(self, own, bullets):
+        self.foe.rect.centery += 3
+        if self.foe.rect.centery > 50:
+            return True
+    def replaceMove(self):
+        return BossMove2(self.foe)
+
 
 class BossMove1(FoeMove):
     def move(self, own, bullets):
         pass
-    def replaceMove(self):
-        bossMove = BossMove2(self.foe)
-        return bossMove
+    def replaceMove(self): 
+        return BossMove2(self.foe)
 
     
 class BossMove2(FoeMove):
     def move(self, own, bullets):
         pass
     def replaceMove(self):
-        bossMove = BossMove3(self.foe)
-        return bossMove
+        return BossMove3(self.foe)
 
 class BossMove3(FoeMove):
     def move(self, own, bullets):
         pass
     def replaceMove(self):
-        bossMove = BossMove4(self.foe)
-        return bossMove
+        return BossMove4(self.foe)
 
 class BossMove4(FoeMove):
     def move(self, own, bullets):

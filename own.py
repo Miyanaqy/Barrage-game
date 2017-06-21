@@ -21,24 +21,28 @@ class OwnClass():
         self.bullets = bullets
         self.atr = 100
         self.state = 0
+        self.dieTime = 0
 
     def move(self):
-        self.rect.centerx += self.speed[0]
-        self.rect.centery += self.speed[1]
-        self.imagesum += 1
-        self.image = pygame.image.load(self.images[int((self.imagesum%12))//3 + self.state])
-        if  self .imagesum > 12:
-            self.imagesum = 0
-        if abs(self.rect.centerx - self.cwid) > self.cwid:
-            self.speed[0] = 0
-        if abs(self.rect.centery - self.chei) > self.chei:
-            self.speed[1] = 0
-        if self.shooting and self.imagesum % 3 == 0:
-            self.barrage.shooting(self.rect.center, self.bullets)
+        if self.dieTime > 30:
+            self.rect.centerx += self.speed[0]
+            self.rect.centery += self.speed[1]
+            self.imagesum += 1
+            self.image = pygame.image.load(self.images[int((self.imagesum%12))//3 + self.state])
+            if  self .imagesum > 12:
+                self.imagesum = 0
+            if abs(self.rect.centerx - self.cwid) > self.cwid:
+                self.speed[0] = 0
+            if abs(self.rect.centery - self.chei) > self.chei:
+                self.speed[1] = 0
+            if self.shooting and self.imagesum % 3 == 0:
+                self.barrage.shooting(self.rect.center, self.bullets)
 
     def die(self):
-        self.rect.center = [225,1000]
-        self.barrage.barDown()
+        if self.dieTime > 100:
+            self.rect.center = [225,730]
+            self.dieTime = 0
+            self.barrage.barDown()
         #rq = Rqueue.creatRq()
         #images = []
         #pos = self.rect
