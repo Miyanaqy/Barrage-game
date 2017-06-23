@@ -3,6 +3,7 @@ from BulletsClass import *
 from Rqueue import *
 from drop import *
 from Angle import *
+import main
 
 #---------------------------怪物类----------------------------------
 class Foe():

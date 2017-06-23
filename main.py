@@ -17,7 +17,8 @@ def plot_read(chapter):
 def plot_process(plots, foes):
     global proc
     global plotIndex
-    proc += 1
+    if len(bossFoe) == 0:
+        proc += 1
     print(proc)
     print(len(plots),plotIndex)
     while(plotIndex < len(plots)):
@@ -25,7 +26,10 @@ def plot_process(plots, foes):
         if proc == int(param[0]):
             print(param)
             foe = creatFoe(param)
-            foes.append(foe)
+            if int(param[2]) > 10:
+                bossFoe.append(foe)
+            else:
+                foes.append(foe)
             plotIndex += 1
         else:
             return
@@ -38,7 +42,7 @@ def creatFoe(param):
     foeMove = get_foeMove(int(param[6]), foe)
     foeMove.shoot = shoot
     return foeMove
-    
+
 #---------------------------物体移动--------------------------------
 def moveAll(own, foes, bullets, ownBullets, drops):
     own.move()
@@ -91,10 +95,19 @@ def colli2(foes, ownBullets):
                 if replace:
                     foe = foe.replaceMove()
                 bullet.die(ownBullets)
+    for bossFoe in foes:
+        for bullet in ownBullets:
+            if collision(foe.foe, bullet):
+                replace = foe.coll(bullet.atr, drops, bossFoe)
+                if replace:
+                    foe = foe.replaceMove()
+                bullet.die(ownBullets)
 
 def draw(own, foes, bullets, ownBullets, drop):
     screen.blit(own.image, own.rect)
     for foe in foes:
+        screen.blit(foe.foe.image, foe.foe.rect)
+    for foe in bossFoe:
         screen.blit(foe.foe.image, foe.foe.rect)
     for bullet in bullets:
         screen.blit(bullet.image, bullet.rect)
@@ -189,95 +202,97 @@ def game_interface(clock):
             screen.blit(title,title_rect)
 
         pygame.display.flip()
+
+if __name__ == '__main__':
+    pygame.init()
+    global width
+    global height
+    width, height = (450,700)
+    screen = pygame.display.set_mode([width,height])
+    screen.fill([255,255,255])
+    global plotIndex
+    global score
+    global ownDie
+    ownDie = False
+    global dieTime
+    global proc
+    background = pygame.image.load('image/interface/background.jpg')
+    background_rect = background.get_rect()
+    background_rect.left, background_rect.top = (0, -1300)
+    score = 0
+    proc = 0
+    plotIndex = 1
+    bullets = []
+    foes = []
+    ownBullets = []
+    drops = []
+    bossFoe = []
+    own = OwnClass([250,730], width/2, height/2, ownBullets)
+    ownShadow = OwnShadow()
+    rq = Rqueue.creatRq()
+    pygame.key.set_repeat(12,12)
+    clock = pygame.time.Clock()
+    plots = plot_read(1)
+    maxs = 0
+    proc = 0
+    #-------------------以下为测试内容------------------------
+    #-----------------掉落物drop--------------------
+    #drop = FractionDrop()
+    #-----------------弹幕类型-----------------------
+    #shoot = 7
+    #------------------怪物移动方式FoeMove,怪物外观BlueFoe-------------------
+    #foe = FoeMove3(BlueFoe([150,-10],drop), shoot)
+    #------------------怪物组foes-------------------------
+    #foes.append(foe)
+    game_interface(clock)
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP and own.rect.centery-10>0:
+                    own.speed[1] = -6
+                if event.key == pygame.K_DOWN and own.rect.centery+10<700 :
+                    own.speed[1] = 6
+                if event.key == pygame.K_LEFT and own.rect.centerx-10>0:
+                    own.speed[0] = -6
+                    own.state = 4
+                if event.key == pygame.K_RIGHT and own.rect.centerx+10<450:
+                    own.speed[0] = 6
+                    own.state = 8
+                if event.key == pygame.K_z:
+                    own.shooting = True
+
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_UP and own.rect.centery-10>0:
+                    own.speed[1] = 0
+                if event.key == pygame.K_DOWN and own.rect.centery+10<700 :
+                    own.speed[1] = 0
+                if event.key == pygame.K_LEFT and own.rect.centerx-10>0:
+                    own.speed[0] = 0
+                    own.state = 0
+                if event.key == pygame.K_RIGHT and own.rect.centerx+10<450:
+                    own.speed[0] = 0
+                    own.state = 0
+                if event.key == pygame.K_z:
+                    own.shooting = False
+                        
+
+
+        clock.tick(50)
+        plot_process(plots, foes)
+        background_rect.centery += 1
+        screen.blit(background,background_rect)
+        if background_rect.top > 0:
+            background_rect.top = -2000
+        if background_rect.top < -1300:
+            screen.blit(background, [0,background_rect.top+2000])
+        moveAll(own, foes, bullets, ownBullets,drops)
+        draw(own,foes,bullets,ownBullets,drops)
+        if own.dieTime <= 100:
+            own.dieTime += 1
+            if own.dieTime < 30:
+                own.rect.centery -= 3
+        pygame.display.flip()
         
-pygame.init()
-global width
-global height
-width, height = (450,700)
-screen = pygame.display.set_mode([width,height])
-screen.fill([255,255,255])
-global plotIndex
-global score
-global ownDie
-ownDie = False
-global dieTime
-global proc
-background = pygame.image.load('image/interface/background.jpg')
-background_rect = background.get_rect()
-background_rect.left, background_rect.top = (0, -1300)
-score = 0
-proc = 0
-plotIndex = 1
-bullets = []
-foes = []
-ownBullets = []
-drops = []
-own = OwnClass([250,730], width/2, height/2, ownBullets)
-ownShadow = OwnShadow()
-rq = Rqueue.creatRq()
-pygame.key.set_repeat(12,12)
-clock = pygame.time.Clock()
-plots = plot_read(1)
-maxs = 0
-proc = 0
-#-------------------以下为测试内容------------------------
-#-----------------掉落物drop--------------------
-#drop = FractionDrop()
-#-----------------弹幕类型-----------------------
-#shoot = 7
-#------------------怪物移动方式FoeMove,怪物外观BlueFoe-------------------
-#foe = FoeMove3(BlueFoe([150,-10],drop), shoot)
-#------------------怪物组foes-------------------------
-#foes.append(foe)
-game_interface(clock)
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            sys.exit()
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP and own.rect.centery-10>0:
-                own.speed[1] = -6
-            if event.key == pygame.K_DOWN and own.rect.centery+10<700 :
-                own.speed[1] = 6
-            if event.key == pygame.K_LEFT and own.rect.centerx-10>0:
-                own.speed[0] = -6
-                own.state = 4
-            if event.key == pygame.K_RIGHT and own.rect.centerx+10<450:
-                own.speed[0] = 6
-                own.state = 8
-            if event.key == pygame.K_z:
-                own.shooting = True
-
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_UP and own.rect.centery-10>0:
-                own.speed[1] = 0
-            if event.key == pygame.K_DOWN and own.rect.centery+10<700 :
-                own.speed[1] = 0
-            if event.key == pygame.K_LEFT and own.rect.centerx-10>0:
-                own.speed[0] = 0
-                own.state = 0
-            if event.key == pygame.K_RIGHT and own.rect.centerx+10<450:
-                own.speed[0] = 0
-                own.state = 0
-            if event.key == pygame.K_z:
-                own.shooting = False
-                    
-
-
-    clock.tick(50)
-    plot_process(plots, foes)
-    background_rect.centery += 1
-    screen.blit(background,background_rect)
-    if background_rect.top > 0:
-        background_rect.top = -2000
-    if background_rect.top < -1300:
-        screen.blit(background, [0,background_rect.top+2000])
-    moveAll(own, foes, bullets, ownBullets,drops)
-    draw(own,foes,bullets,ownBullets,drops)
-    if own.dieTime <= 100:
-        own.dieTime += 1
-        if own.dieTime < 30:
-            own.rect.centery -= 3
-    pygame.display.flip()
-    
 
