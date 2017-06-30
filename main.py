@@ -44,13 +44,15 @@ def creatFoe(param):
     return foeMove
 
 #---------------------------物体移动--------------------------------
-def moveAll(own, foes, bullets, ownBullets, drops):
+def moveAll(own, foes, bossFoe, bullets, ownBullets, drops):
     own.move()
     for foe in foes:
         foe.move(own, bullets)
         #敌机超出屏幕外50px后，消除敌机
         if abs(foe.foe.rect.centerx - width/2) > width/2+50 or abs(foe.foe.rect.centery - height/2) > height/2+50:
             foes.remove(foe)
+    for foe in bossFoe:
+        foe.move(own, bullets)
     for bullet in bullets:
         bullet.move()
         #弹幕超出屏幕外100px后，消除弹幕
@@ -66,16 +68,20 @@ def moveAll(own, foes, bullets, ownBullets, drops):
         #掉落物超出屏幕外12px后，消除掉落物
         if abs(drop.rect.centerx - width/2) > width/2+10 or abs(drop.rect.centery - height/2) > height/2+10:
             drops.remove(drop)
-    colli1(own, foes, bullets, drops)
-    colli2(foes, ownBullets)
+    colli1(own, foes, bossFoe, bullets, drops)
+    colli2(foes, bossFoe, ownBullets)
 
 #---------------------------物体碰撞------------------------------------
-def colli1(own, foes, bullets, drops):
+def colli1(own, foes, bossFoe, bullets, drops):
     global ownDie
     global dieTime
     for foe in foes:
         if collision(own, foe.foe, -10):
             foe.coll(own.atr, drops, foes)
+            own.die()
+    for foe in bossFoe:
+        if collision(own, foe.foe, -10):
+            foe.coll(0, drops, bossFoe)
             own.die()
     for bullet in bullets:
         if collision(own, bullet, -10):
@@ -87,7 +93,7 @@ def colli1(own, foes, bullets, drops):
             #own.barrage.barUp()
             drop.coll(drops, own)
 
-def colli2(foes, ownBullets):
+def colli2(foes, bossFoe, ownBullets):
     for foe in foes:
         for bullet in ownBullets:
             if collision(foe.foe, bullet):
@@ -95,7 +101,7 @@ def colli2(foes, ownBullets):
                 if replace:
                     foe = foe.replaceMove()
                 bullet.die(ownBullets)
-    for bossFoe in foes:
+    for foe in bossFoe:
         for bullet in ownBullets:
             if collision(foe.foe, bullet):
                 replace = foe.coll(bullet.atr, drops, bossFoe)
@@ -103,7 +109,7 @@ def colli2(foes, ownBullets):
                     foe = foe.replaceMove()
                 bullet.die(ownBullets)
 
-def draw(own, foes, bullets, ownBullets, drop):
+def draw(own, foes, bossFoe, bullets, ownBullets, drop):
     screen.blit(own.image, own.rect)
     for foe in foes:
         screen.blit(foe.foe.image, foe.foe.rect)
@@ -287,8 +293,8 @@ if __name__ == '__main__':
             background_rect.top = -2000
         if background_rect.top < -1300:
             screen.blit(background, [0,background_rect.top+2000])
-        moveAll(own, foes, bullets, ownBullets,drops)
-        draw(own,foes,bullets,ownBullets,drops)
+        moveAll(own, foes, bossFoe, bullets, ownBullets,drops)
+        draw(own,foes, bossFoe,bullets,ownBullets,drops)
         if own.dieTime <= 100:
             own.dieTime += 1
             if own.dieTime < 30:

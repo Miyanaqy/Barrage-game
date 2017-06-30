@@ -60,6 +60,22 @@ class DroopBullets(BulletsClass):
         self.rect.centerx = self.x
         self.rect.centery = self.y
 
+class DecayBullets(BulletsClass):
+    def __init__(self, type, pos, time):
+        super(DecayBullets, self).__init__(type, pos)
+        self.time = time
+
+    def move(self):
+        self.time -= 1
+        if self.time = 0:
+            bu = self.next
+            while bu:
+                bu.time = 0
+                bu.speed = (0, 4)
+                bu = bu.next
+        super(DecayBullets, self).move()
+                
+
 class OwnBullet1(BulletsClass):
     def __init__(self, pos, speed):
         super(OwnBullet1, self).__init__(21,pos)
@@ -172,15 +188,44 @@ class ShootMode():
 
 class BossShoot1():
     def shooting(self, index, pos, epos, bullets, foe = None):
-        pass
+        if index % 5 == 0:
+            y = random.randint(0, 750)
+            x = random.randint(0, 1) * 450
+            if x == 0:
+                sp = (2, 0)
+            else:
+                sp = (-2, 0)
+            bullet = BulletsClass(3, [x, y])
+            bullet.speed = sp
+            bullets.append(bullet)
 
 class BossShoot2():
     def shooting(self, index, pos, epos, bullets, foe = None):
-        pass
+        for i in range(5):
+            for j in range(8):
+                x = (i-2) * 30
+                bullet = BulletsClass(8, [epos[0] + x, epos[1]])
+                ang = Angle(pos, bullet.rect.center)
+                sp = Speed(ang, (j+1)*2)
+                bullet.speed = sp
+                bullets.append(bullet)
 
 class BossShoot3():
     def shooting(self, index, pos, epos, bullets, foe = None):
-        pass
+        time = 40
+        sp = (0, 0)
+        nextBu = None
+        for i in range(100):
+            x = random.randint(0, 450)
+            y = random.randint(0, 750)
+            if x > pos[0] + 40 or x < pos[0] - 40:
+                if y > pos[1] + 40 or y < pos[1] - 40:
+                    bullet = DecayBullets(5, [x, y], time)
+                    bullet.speed = sp
+                    if nextBu != None:
+                        bullet.next = nextBu
+                    nextBu = bullet
+                    bullets.append(bullet)
 
 class BossShoot4():
     def shooting(self, index, pos, epos, bullets, foe = None):
