@@ -60,21 +60,39 @@ class DroopBullets(BulletsClass):
         self.rect.centerx = self.x
         self.rect.centery = self.y
 
-class DecayBullets(BulletsClass):
+class DecayBulletsDown(BulletsClass):
     def __init__(self, type, pos, time):
-        super(DecayBullets, self).__init__(type, pos)
+        super(DecayBulletsDown, self).__init__(type, pos)
         self.time = time
+        self.next = None
 
     def move(self):
         self.time -= 1
-        if self.time = 0:
+        if self.time == 0:
             bu = self.next
             while bu:
                 bu.time = 0
                 bu.speed = (0, 4)
                 bu = bu.next
-        super(DecayBullets, self).move()
-                
+        super(DecayBulletsDown, self).move()
+
+class DecayBulletsChange(BulletsClass):
+    def __init__(self, type, pos, time):
+        super(DecayBulletsChange, self).__init__(type, pos)
+        self.time = time
+        self.next = None
+
+    def move(self):
+        self.time -= 1
+        if self.time == 0:
+            bu = self.next
+            while bu:
+                bu.time = 0
+                ang = random.randint(0,360)
+                sp = Speed(ang, 3)
+                bu.speed = sp
+                bu = bu.next
+        super(DecayBulletsChange, self).move()
 
 class OwnBullet1(BulletsClass):
     def __init__(self, pos, speed):
@@ -211,29 +229,76 @@ class BossShoot2():
                 bullets.append(bullet)
 
 class BossShoot3():
+    def __init__(self):
+        self.bullet = None
+    
     def shooting(self, index, pos, epos, bullets, foe = None):
-        time = 40
+        time = 70
         sp = (0, 0)
-        nextBu = None
-        for i in range(100):
-            x = random.randint(0, 450)
-            y = random.randint(0, 750)
-            if x > pos[0] + 40 or x < pos[0] - 40:
-                if y > pos[1] + 40 or y < pos[1] - 40:
-                    bullet = DecayBullets(5, [x, y], time)
-                    bullet.speed = sp
-                    if nextBu != None:
-                        bullet.next = nextBu
-                    nextBu = bullet
-                    bullets.append(bullet)
+        x = random.randint(0, 450)
+        y = random.randint(0, 750)
+        if x > pos[0] + 40 or x < pos[0] - 40:
+            if y > pos[1] + 40 or y < pos[1] - 40:
+                bullet = DecayBulletsDown(5, [x, y], time)
+                bullet.speed = sp
+                if self.bullet:
+                    self.bullet.next = bullet
+                    self.bullet = bullet
+                else:
+                    self.bullet = bullet
+                bullets.append(bullet)
 
 class BossShoot4():
-    def shooting(self, index, pos, epos, bullets, foe = None):
-        pass
+    def __init__(self):
+        self.son = BulletsClass(17, [0, 0])
 
-class BossShoot5():
+    def shootSon(self, index, pos, epos, bullets):
+        ang = Angle(pos, epos)
+        sp = Speed(ang)
+        self.son.rect.center = epos
+        self.son.speed = sp
+        bullets.append(self.son)
+        
     def shooting(self, index, pos, epos, bullets, foe = None):
-        pass
+        if self.son in bullets:
+            if index % 8 == 0:
+                ang = random.randint(0,360)
+                sp = Speed(ang)
+                bullet = BulletsClass(2, self.son.rect.center)
+                bullet.speed = sp
+                bullets.append(bullet)
+            
+class BossShoot5():
+    def __init__(self):
+        self.son = []
+        self.son.append(BulletsClass(18, [0, 0]))
+        self.son.append(BulletsClass(18, [0, 0]))
+        self.son.append(BulletsClass(18, [0, 0]))
+        self.bullet = None
+
+    def shootSon(self, index, pos, epos, bullets):
+        ang = Angle(pos, epos)
+        for i in range(3):
+            sp = Speed(ang + (ang-1) * 20)
+            self.son.rect.center = epos
+            self.son.speed = sp
+            bullets.append(self.son)
+    
+    def shooting(self, index, pos, epos, bullets, foe = None):
+        if self.son[0] in bullets:
+            if index % 2 == 0:
+                sonIndex = random.randint(0,3)
+                x = random.randint(0, self.son[sonIndex].rect.right - self.son[sonIndex].rect.left)
+                y = random.randint(0, self.son[sonIndex].rect.bottom - self.son[sonIndex].rect.top)
+                bullet = DecayBulletsChange(8, [x,y], 100)
+                bullet.speed = (0, 0)
+                if self.bullet:
+                    self.bullet.next = bullet
+                    self.bullet = bullet
+                else:
+                    self.bullet = bullet
+                    
+                bullets.append(bullet)
 
 class BossShoot6():
     def shooting(self, index, pos, epos, bullets, foe = None):
